@@ -1,7 +1,7 @@
 From 6570b7b9c7bdfee4e17f64fa065c5e12bda7f101 Mon Sep 17 00:00:00 2001
 From: endalk200 <eb808826@gmail.com>
 Date: Tue, 17 Feb 2026 14:19:17 +0300
-Subject: [PATCH 6/8] docs(readme): add fork notice and fork install guidance
+Subject: [PATCH 06/10] docs(readme): add fork notice and fork install guidance
 
 Co-authored-by: Cursor <cursoragent@cursor.com>
 ---
