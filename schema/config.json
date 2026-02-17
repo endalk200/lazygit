@@ -3,6 +3,17 @@
   "$id": "https://github.com/jesseduffield/lazygit/pkg/config/user-config",
   "$ref": "#/$defs/UserConfig",
   "$defs": {
+    "AICommitMessageConfig": {
+      "properties": {
+        "command": {
+          "type": "string",
+          "description": "Command to run for generating a commit title and description.\nThe command is executed from the repository root."
+        }
+      },
+      "additionalProperties": false,
+      "type": "object",
+      "description": "Configuration for generating commit messages via an external command."
+    },
     "CommitConfig": {
       "properties": {
         "signOff": {
@@ -19,6 +30,10 @@
           "type": "integer",
           "description": "If autoWrapCommitMessage is true, the width to wrap to",
           "default": 72
+        },
+        "aiCommitMessage": {
+          "$ref": "#/$defs/AICommitMessageConfig",
+          "description": "Configuration for generating commit messages via an external command."
         }
       },
       "additionalProperties": false,
@@ -919,6 +934,10 @@
         "commitMenu": {
           "type": "string",
           "default": "\u003cc-o\u003e"
+        },
+        "generateCommitMessage": {
+          "type": "string",
+          "default": "\u003cc-g\u003e"
         }
       },
       "additionalProperties": false,
