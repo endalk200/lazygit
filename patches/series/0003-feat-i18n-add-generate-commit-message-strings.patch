@@ -1,0 +1,70 @@
+From 598b2a3761269125f9717d741c6417de4df50dbd Mon Sep 17 00:00:00 2001
+From: endalk200 <eb808826@gmail.com>
+Date: Tue, 17 Feb 2026 13:09:19 +0300
+Subject: [PATCH 3/8] feat(i18n): add generate commit message strings
+
+---
+ pkg/i18n/english.go | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
+
+diff --git a/pkg/i18n/english.go b/pkg/i18n/english.go
+index ce87693a2..b26381114 100644
+--- a/pkg/i18n/english.go
++++ b/pkg/i18n/english.go
+@@ -421,6 +421,7 @@ type TranslationSet struct {
+ 	RedoingStatus                         string
+ 	CheckingOutStatus                     string
+ 	CommittingStatus                      string
++	GeneratingCommitMessage               string
+ 	RewordingStatus                       string
+ 	RevertingStatus                       string
+ 	CreatingFixupCommitStatus             string
+@@ -666,7 +667,10 @@ type TranslationSet struct {
+ 	CommitHash                            string
+ 	CommitURL                             string
+ 	PasteCommitMessageFromClipboard       string
++	GenerateCommitMessage                 string
+ 	SurePasteCommitMessage                string
++	SureReplaceCommitMessageWithGenerated string
++	GenerateCommitMessageDisabled         string
+ 	CommitMessage                         string
+ 	CommitMessageBody                     string
+ 	CommitSubject                         string
+@@ -980,6 +984,7 @@ type Actions struct {
+ 	ResetCommitAuthor                string
+ 	SetCommitAuthor                  string
+ 	AddCommitCoAuthor                string
++	GenerateCommitMessage            string
+ 	RevertCommit                     string
+ 	CreateFixupCommit                string
+ 	SquashAllAboveFixupCommits       string
+@@ -1529,6 +1534,7 @@ func EnglishTranslationSet() *TranslationSet {
+ 		RedoingStatus:                        "Redoing",
+ 		CheckingOutStatus:                    "Checking out",
+ 		CommittingStatus:                     "Committing",
++		GeneratingCommitMessage:              "Generating commit message",
+ 		RewordingStatus:                      "Rewording",
+ 		RevertingStatus:                      "Reverting",
+ 		CreatingFixupCommitStatus:            "Creating fixup commit",
+@@ -1774,7 +1780,10 @@ func EnglishTranslationSet() *TranslationSet {
+ 		CommitHash:                               "Commit hash",
+ 		CommitURL:                                "Commit URL",
+ 		PasteCommitMessageFromClipboard:          "Paste commit message from clipboard",
++		GenerateCommitMessage:                    "Generate commit message",
+ 		SurePasteCommitMessage:                   "Pasting will overwrite the current commit message, continue?",
++		SureReplaceCommitMessageWithGenerated:    "Replacing will overwrite the current commit message, continue?",
++		GenerateCommitMessageDisabled:            "Set git.commit.aiCommitMessage.command in your config to enable this action.",
+ 		CommitMessage:                            "Commit message (subject and body)",
+ 		CommitMessageBody:                        "Commit message body",
+ 		CommitSubject:                            "Commit subject",
+@@ -2046,6 +2055,7 @@ func EnglishTranslationSet() *TranslationSet {
+ 			ResetCommitAuthor:                "Reset commit author",
+ 			SetCommitAuthor:                  "Set commit author",
+ 			AddCommitCoAuthor:                "Add commit co-author",
++			GenerateCommitMessage:            "Generate commit message",
+ 			RevertCommit:                     "Revert commit",
+ 			CreateFixupCommit:                "Create fixup commit",
+ 			SquashAllAboveFixupCommits:       "Squash all above fixup commits",
+-- 
+2.51.2
+

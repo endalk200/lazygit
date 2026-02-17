@@ -1,0 +1,373 @@
+From d5740b764ff2b26c47a9dfc1b2d00ffd2a2f23cb Mon Sep 17 00:00:00 2001
+From: endalk200 <eb808826@gmail.com>
+Date: Tue, 17 Feb 2026 13:09:19 +0300
+Subject: [PATCH 2/8] feat(gui): generate commit message from external command
+
+---
+ pkg/gui/context/commit_message_context.go     |   8 +-
+ .../commit_description_controller.go          |  10 ++
+ .../controllers/commit_message_controller.go  |  10 ++
+ pkg/gui/controllers/helpers/commits_helper.go | 165 ++++++++++++++++++
+ .../helpers/commits_helper_test.go            |  58 ++++++
+ 5 files changed, 250 insertions(+), 1 deletion(-)
+
+diff --git a/pkg/gui/context/commit_message_context.go b/pkg/gui/context/commit_message_context.go
+index d533e1dea..a9cb46da1 100644
+--- a/pkg/gui/context/commit_message_context.go
++++ b/pkg/gui/context/commit_message_context.go
+@@ -1,6 +1,7 @@
+ package context
+ 
+ import (
++	"fmt"
+ 	"os"
+ 	"path/filepath"
+ 	"strconv"
+@@ -165,11 +166,16 @@ func (self *CommitMessageContext) SetPanelState(
+ 	self.GetView().Title = summaryTitle
+ 	self.c.Views().CommitDescription.Title = descriptionTitle
+ 
+-	self.c.Views().CommitDescription.Subtitle = utils.ResolvePlaceholderString(self.c.Tr.CommitDescriptionSubTitle,
++	subtitle := utils.ResolvePlaceholderString(self.c.Tr.CommitDescriptionSubTitle,
+ 		map[string]string{
+ 			"togglePanelKeyBinding": keybindings.Label(self.c.UserConfig().Keybinding.Universal.TogglePanel),
+ 			"commitMenuKeybinding":  keybindings.Label(self.c.UserConfig().Keybinding.CommitMessage.CommitMenu),
+ 		})
++	generateCommitMessageKey := keybindings.Label(self.c.UserConfig().Keybinding.CommitMessage.GenerateCommitMessage)
++	if generateCommitMessageKey != "<disabled>" {
++		subtitle += fmt.Sprintf(", %s %s", generateCommitMessageKey, self.c.Tr.GenerateCommitMessage)
++	}
++	self.c.Views().CommitDescription.Subtitle = subtitle
+ 
+ 	self.c.Views().CommitDescription.Visible = true
+ }
+diff --git a/pkg/gui/controllers/commit_description_controller.go b/pkg/gui/controllers/commit_description_controller.go
+index 24653c767..3934dbcf4 100644
+--- a/pkg/gui/controllers/commit_description_controller.go
++++ b/pkg/gui/controllers/commit_description_controller.go
+@@ -45,6 +45,12 @@ func (self *CommitDescriptionController) GetKeybindings(opts types.KeybindingsOp
+ 			Key:     opts.GetKey(opts.Config.CommitMessage.CommitMenu),
+ 			Handler: self.openCommitMenu,
+ 		},
++		{
++			Key:               opts.GetKey(opts.Config.CommitMessage.GenerateCommitMessage),
++			Handler:           self.generateCommitMessage,
++			Description:       self.c.Tr.GenerateCommitMessage,
++			GetDisabledReason: self.c.Helpers().Commits.GetGenerateCommitMessageDisabledReason,
++		},
+ 	}
+ 
+ 	return bindings
+@@ -136,6 +142,10 @@ func (self *CommitDescriptionController) openCommitMenu() error {
+ 	return self.c.Helpers().Commits.OpenCommitMenu(authorSuggestion)
+ }
+ 
++func (self *CommitDescriptionController) generateCommitMessage() error {
++	return self.c.Helpers().Commits.GenerateCommitMessageWithAI()
++}
++
+ func (self *CommitDescriptionController) onClick(opts gocui.ViewMouseBindingOpts) error {
+ 	self.c.Context().Replace(self.c.Contexts().CommitDescription)
+ 	return nil
+diff --git a/pkg/gui/controllers/commit_message_controller.go b/pkg/gui/controllers/commit_message_controller.go
+index e9ff1bc67..5a9a54f95 100644
+--- a/pkg/gui/controllers/commit_message_controller.go
++++ b/pkg/gui/controllers/commit_message_controller.go
+@@ -54,6 +54,12 @@ func (self *CommitMessageController) GetKeybindings(opts types.KeybindingsOpts)
+ 			Key:     opts.GetKey(opts.Config.CommitMessage.CommitMenu),
+ 			Handler: self.openCommitMenu,
+ 		},
++		{
++			Key:               opts.GetKey(opts.Config.CommitMessage.GenerateCommitMessage),
++			Handler:           self.generateCommitMessage,
++			Description:       self.c.Tr.GenerateCommitMessage,
++			GetDisabledReason: self.c.Helpers().Commits.GetGenerateCommitMessageDisabledReason,
++		},
+ 	}
+ 
+ 	return bindings
+@@ -194,6 +200,10 @@ func (self *CommitMessageController) openCommitMenu() error {
+ 	return self.c.Helpers().Commits.OpenCommitMenu(authorSuggestion)
+ }
+ 
++func (self *CommitMessageController) generateCommitMessage() error {
++	return self.c.Helpers().Commits.GenerateCommitMessageWithAI()
++}
++
+ func (self *CommitMessageController) onClick(opts gocui.ViewMouseBindingOpts) error {
+ 	self.c.Context().Replace(self.c.Contexts().CommitMessage)
+ 	return nil
+diff --git a/pkg/gui/controllers/helpers/commits_helper.go b/pkg/gui/controllers/helpers/commits_helper.go
+index 471706064..0b6fdd735 100644
+--- a/pkg/gui/controllers/helpers/commits_helper.go
++++ b/pkg/gui/controllers/helpers/commits_helper.go
+@@ -1,7 +1,10 @@
+ package helpers
+ 
+ import (
++	"encoding/json"
+ 	"errors"
++	"fmt"
++	"io"
+ 	"path/filepath"
+ 	"strings"
+ 	"time"
+@@ -22,6 +25,30 @@ type CommitsHelper struct {
+ 	setCommitDescription          func(string)
+ }
+ 
++type generateCommitMessageRequest struct {
++	Version     string                            `json:"version"`
++	Cwd         string                            `json:"cwd"`
++	Draft       *generateCommitMessageDraft       `json:"draft,omitempty"`
++	Constraints *generateCommitMessageConstraints `json:"constraints,omitempty"`
++}
++
++type generateCommitMessageDraft struct {
++	Title       string `json:"title,omitempty"`
++	Description string `json:"description,omitempty"`
++}
++
++type generateCommitMessageConstraints struct {
++	TitleMaxLength int `json:"titleMaxLength,omitempty"`
++}
++
++type generateCommitMessageResponse struct {
++	Version     string         `json:"version"`
++	Title       string         `json:"title"`
++	Description string         `json:"description"`
++	Warnings    []string       `json:"warnings,omitempty"`
++	Meta        map[string]any `json:"meta,omitempty"`
++}
++
+ func NewCommitsHelper(
+ 	c *HelperCommon,
+ 	getCommitSummary func() string,
+@@ -48,6 +75,10 @@ func (self *CommitsHelper) SplitCommitMessageAndDescription(message string) (str
+ func (self *CommitsHelper) SetMessageAndDescriptionInView(message string) {
+ 	summary, description := self.SplitCommitMessageAndDescription(message)
+ 
++	self.SetSummaryAndDescriptionInView(summary, description)
++}
++
++func (self *CommitsHelper) SetSummaryAndDescriptionInView(summary string, description string) {
+ 	self.setCommitSummary(summary)
+ 	self.setCommitDescription(description)
+ 	self.c.Contexts().CommitMessage.RenderSubtitle()
+@@ -208,6 +239,14 @@ func (self *CommitsHelper) OpenCommitMenu(suggestionFunc func(string) []*types.S
+ 			Key:            'e',
+ 			DisabledReason: disabledReasonForOpenInEditor,
+ 		},
++		{
++			Label: self.c.Tr.GenerateCommitMessage,
++			OnPress: func() error {
++				return self.GenerateCommitMessageWithAI()
++			},
++			Key:            'g',
++			DisabledReason: self.GetGenerateCommitMessageDisabledReason(),
++		},
+ 		{
+ 			Label: self.c.Tr.AddCoAuthor,
+ 			OnPress: func() error {
+@@ -229,6 +268,132 @@ func (self *CommitsHelper) OpenCommitMenu(suggestionFunc func(string) []*types.S
+ 	})
+ }
+ 
++func (self *CommitsHelper) GetGenerateCommitMessageDisabledReason() *types.DisabledReason {
++	if strings.TrimSpace(self.c.UserConfig().Git.Commit.AICommitMessage.Command) != "" {
++		return nil
++	}
++
++	return &types.DisabledReason{
++		Text: self.c.Tr.GenerateCommitMessageDisabled,
++	}
++}
++
++func (self *CommitsHelper) GenerateCommitMessageWithAI() error {
++	if disabledReason := self.GetGenerateCommitMessageDisabledReason(); disabledReason != nil {
++		return errors.New(disabledReason.Text)
++	}
++
++	currentMessage := self.JoinCommitMessageAndUnwrappedDescription()
++	return self.c.ConfirmIf(currentMessage != "", types.ConfirmOpts{
++		Title:  self.c.Tr.GenerateCommitMessage,
++		Prompt: self.c.Tr.SureReplaceCommitMessageWithGenerated,
++		HandleConfirm: func() error {
++			return self.generateCommitMessageWithAI()
++		},
++	})
++}
++
++func (self *CommitsHelper) generateCommitMessageWithAI() error {
++	requestStr, err := self.getGenerateCommitMessageRequest()
++	if err != nil {
++		return err
++	}
++
++	command := strings.TrimSpace(self.c.UserConfig().Git.Commit.AICommitMessage.Command)
++	cmdObj := self.c.OS().Cmd.
++		NewShell(command, self.c.UserConfig().OS.ShellFunctionsFile).
++		SetWd(self.c.Git().RepoPaths.WorktreePath()).
++		SetStdin(requestStr)
++
++	self.c.LogAction(self.c.Tr.Actions.GenerateCommitMessage)
++	return self.c.WithWaitingStatus(self.c.Tr.GeneratingCommitMessage, func(gocui.Task) error {
++		output, err := cmdObj.RunWithOutput()
++		if err != nil {
++			return err
++		}
++
++		response, err := parseGenerateCommitMessageResponse(output)
++		if err != nil {
++			return err
++		}
++
++		self.c.OnUIThread(func() error {
++			self.SetSummaryAndDescriptionInView(response.Title, response.Description)
++			if len(response.Warnings) > 0 {
++				self.c.Toast(strings.Join(response.Warnings, "; "))
++			}
++			return nil
++		})
++
++		return nil
++	})
++}
++
++func (self *CommitsHelper) getGenerateCommitMessageRequest() (string, error) {
++	draft := &generateCommitMessageDraft{
++		Title:       self.getCommitSummary(),
++		Description: self.getUnwrappedCommitDescription(),
++	}
++
++	request := &generateCommitMessageRequest{
++		Version: "1",
++		Cwd:     self.c.Git().RepoPaths.WorktreePath(),
++		Constraints: &generateCommitMessageConstraints{
++			TitleMaxLength: 72,
++		},
++	}
++	if draft.Title != "" || draft.Description != "" {
++		request.Draft = draft
++	}
++
++	payload, err := json.Marshal(request)
++	if err != nil {
++		return "", err
++	}
++
++	return string(payload), nil
++}
++
++func parseGenerateCommitMessageResponse(output string) (*generateCommitMessageResponse, error) {
++	trimmedOutput := strings.TrimSpace(output)
++	if trimmedOutput == "" {
++		return nil, errors.New("AI commit command returned empty output")
++	}
++
++	decoder := json.NewDecoder(strings.NewReader(trimmedOutput))
++	decoder.DisallowUnknownFields()
++
++	var response generateCommitMessageResponse
++	if err := decoder.Decode(&response); err != nil {
++		return nil, fmt.Errorf("invalid AI commit response: %w", err)
++	}
++	if err := ensureEOF(decoder); err != nil {
++		return nil, fmt.Errorf("invalid AI commit response: %w", err)
++	}
++
++	response.Title = strings.TrimSpace(response.Title)
++	response.Description = strings.TrimSpace(response.Description)
++	if response.Title == "" {
++		return nil, errors.New("invalid AI commit response: missing title")
++	}
++	if strings.Contains(response.Title, "\n") {
++		return nil, errors.New("invalid AI commit response: title must be a single line")
++	}
++
++	return &response, nil
++}
++
++func ensureEOF(decoder *json.Decoder) error {
++	var extra any
++	if err := decoder.Decode(&extra); err != io.EOF {
++		if err == nil {
++			return errors.New("unexpected extra JSON content")
++		}
++		return err
++	}
++	return nil
++}
++
+ func (self *CommitsHelper) addCoAuthor(suggestionFunc func(string) []*types.Suggestion) error {
+ 	self.c.Prompt(types.PromptOpts{
+ 		Title:               self.c.Tr.AddCoAuthorPromptTitle,
+diff --git a/pkg/gui/controllers/helpers/commits_helper_test.go b/pkg/gui/controllers/helpers/commits_helper_test.go
+index 6197c3916..d8e2f2c64 100644
+--- a/pkg/gui/controllers/helpers/commits_helper_test.go
++++ b/pkg/gui/controllers/helpers/commits_helper_test.go
+@@ -39,3 +39,61 @@ func TestTryRemoveHardLineBreaks(t *testing.T) {
+ 		})
+ 	}
+ }
++
++func TestParseGenerateCommitMessageResponse(t *testing.T) {
++	scenarios := []struct {
++		name          string
++		output        string
++		expectedTitle string
++		expectedBody  string
++		expectedErr   string
++	}{
++		{
++			name:          "valid response",
++			output:        `{"version":"1","title":"feat: add parser","description":"adds parser for AI response","warnings":["w1"]}`,
++			expectedTitle: "feat: add parser",
++			expectedBody:  "adds parser for AI response",
++		},
++		{
++			name:        "empty output",
++			output:      "",
++			expectedErr: "empty output",
++		},
++		{
++			name:        "invalid json",
++			output:      "not json",
++			expectedErr: "invalid AI commit response",
++		},
++		{
++			name:        "missing title",
++			output:      `{"version":"1","description":"body only"}`,
++			expectedErr: "missing title",
++		},
++		{
++			name:        "multiline title",
++			output:      "{\n\"version\":\"1\",\n\"title\":\"line 1\\nline 2\",\n\"description\":\"body\"\n}",
++			expectedErr: "single line",
++		},
++		{
++			name:        "unknown field",
++			output:      `{"version":"1","title":"feat","description":"body","unknown":"value"}`,
++			expectedErr: "invalid AI commit response",
++		},
++	}
++
++	for _, s := range scenarios {
++		t.Run(s.name, func(t *testing.T) {
++			result, err := parseGenerateCommitMessageResponse(s.output)
++			if s.expectedErr != "" {
++				assert.Error(t, err)
++				assert.ErrorContains(t, err, s.expectedErr)
++				assert.Nil(t, result)
++				return
++			}
++
++			assert.NoError(t, err)
++			assert.Equal(t, s.expectedTitle, result.Title)
++			assert.Equal(t, s.expectedBody, result.Description)
++		})
++	}
++}
+-- 
+2.51.2
+
