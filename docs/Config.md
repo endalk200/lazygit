@@ -359,6 +359,12 @@ git:
     # If autoWrapCommitMessage is true, the width to wrap to
     autoWrapWidth: 72
 
+    # Configuration for generating commit messages via an external command.
+    aiCommitMessage:
+      # Command to run for generating a commit title and description.
+      # The command is executed from the repository root.
+      command: ""
+
   # Config relating to merging
   merging:
     # If true, run merges in a subprocess so that if a commit message is required,
@@ -753,6 +759,7 @@ keybinding:
     bulkMenu: b
   commitMessage:
     commitMenu: <c-o>
+    generateCommitMessage: <c-g>
 ```
 <!-- END CONFIG YAML -->
 
