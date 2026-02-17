@@ -204,6 +204,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
 | `` <esc> `` | Fechar/Cancelar |  |
 | `` <c-o> `` | Copy to clipboard |  |
 
+## Descrição de Commit
+
+| Key | Action | Info |
+|-----|--------|-------------|
+| `` <c-g> `` | Generate commit message |  |
+
 ## Etiquetas
 
 | Key | Action | Info |
@@ -403,6 +409,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
 |-----|--------|-------------|
 | `` <enter> `` | Confirmar |  |
 | `` <esc> `` | Fechar |  |
+| `` <c-g> `` | Generate commit message |  |
 
 ## Worktrees
 
