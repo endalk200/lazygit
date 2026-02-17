@@ -54,6 +54,12 @@ func (self *CommitMessageController) GetKeybindings(opts types.KeybindingsOpts) 
 			Key:     opts.GetKey(opts.Config.CommitMessage.CommitMenu),
 			Handler: self.openCommitMenu,
 		},
+		{
+			Key:               opts.GetKey(opts.Config.CommitMessage.GenerateCommitMessage),
+			Handler:           self.generateCommitMessage,
+			Description:       self.c.Tr.GenerateCommitMessage,
+			GetDisabledReason: self.c.Helpers().Commits.GetGenerateCommitMessageDisabledReason,
+		},
 	}
 
 	return bindings
@@ -192,6 +198,10 @@ func (self *CommitMessageController) close() error {
 func (self *CommitMessageController) openCommitMenu() error {
 	authorSuggestion := self.c.Helpers().Suggestions.GetAuthorsSuggestionsFunc()
 	return self.c.Helpers().Commits.OpenCommitMenu(authorSuggestion)
+}
+
+func (self *CommitMessageController) generateCommitMessage() error {
+	return self.c.Helpers().Commits.GenerateCommitMessageWithAI()
 }
 
 func (self *CommitMessageController) onClick(opts gocui.ViewMouseBindingOpts) error {
