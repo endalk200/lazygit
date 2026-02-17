@@ -1,6 +1,7 @@
 package context
 
 import (
+	"fmt"
 	"os"
 	"path/filepath"
 	"strconv"
@@ -165,11 +166,16 @@ func (self *CommitMessageContext) SetPanelState(
 	self.GetView().Title = summaryTitle
 	self.c.Views().CommitDescription.Title = descriptionTitle
 
-	self.c.Views().CommitDescription.Subtitle = utils.ResolvePlaceholderString(self.c.Tr.CommitDescriptionSubTitle,
+	subtitle := utils.ResolvePlaceholderString(self.c.Tr.CommitDescriptionSubTitle,
 		map[string]string{
 			"togglePanelKeyBinding": keybindings.Label(self.c.UserConfig().Keybinding.Universal.TogglePanel),
 			"commitMenuKeybinding":  keybindings.Label(self.c.UserConfig().Keybinding.CommitMessage.CommitMenu),
 		})
+	generateCommitMessageKey := keybindings.Label(self.c.UserConfig().Keybinding.CommitMessage.GenerateCommitMessage)
+	if generateCommitMessageKey != "<disabled>" {
+		subtitle += fmt.Sprintf(", %s %s", generateCommitMessageKey, self.c.Tr.GenerateCommitMessage)
+	}
+	self.c.Views().CommitDescription.Subtitle = subtitle
 
 	self.c.Views().CommitDescription.Visible = true
 }

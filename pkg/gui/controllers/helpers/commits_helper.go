@@ -1,7 +1,10 @@
 package helpers
 
 import (
+	"encoding/json"
 	"errors"
+	"fmt"
+	"io"
 	"path/filepath"
 	"strings"
 	"time"
@@ -20,6 +23,30 @@ type CommitsHelper struct {
 	getCommitDescription          func() string
 	getUnwrappedCommitDescription func() string
 	setCommitDescription          func(string)
+}
+
+type generateCommitMessageRequest struct {
+	Version     string                            `json:"version"`
+	Cwd         string                            `json:"cwd"`
+	Draft       *generateCommitMessageDraft       `json:"draft,omitempty"`
+	Constraints *generateCommitMessageConstraints `json:"constraints,omitempty"`
+}
+
+type generateCommitMessageDraft struct {
+	Title       string `json:"title,omitempty"`
+	Description string `json:"description,omitempty"`
+}
+
+type generateCommitMessageConstraints struct {
+	TitleMaxLength int `json:"titleMaxLength,omitempty"`
+}
+
+type generateCommitMessageResponse struct {
+	Version     string         `json:"version"`
+	Title       string         `json:"title"`
+	Description string         `json:"description"`
+	Warnings    []string       `json:"warnings,omitempty"`
+	Meta        map[string]any `json:"meta,omitempty"`
 }
 
 func NewCommitsHelper(
@@ -48,6 +75,10 @@ func (self *CommitsHelper) SplitCommitMessageAndDescription(message string) (str
 func (self *CommitsHelper) SetMessageAndDescriptionInView(message string) {
 	summary, description := self.SplitCommitMessageAndDescription(message)
 
+	self.SetSummaryAndDescriptionInView(summary, description)
+}
+
+func (self *CommitsHelper) SetSummaryAndDescriptionInView(summary string, description string) {
 	self.setCommitSummary(summary)
 	self.setCommitDescription(description)
 	self.c.Contexts().CommitMessage.RenderSubtitle()
@@ -209,6 +240,14 @@ func (self *CommitsHelper) OpenCommitMenu(suggestionFunc func(string) []*types.S
 			DisabledReason: disabledReasonForOpenInEditor,
 		},
 		{
+			Label: self.c.Tr.GenerateCommitMessage,
+			OnPress: func() error {
+				return self.GenerateCommitMessageWithAI()
+			},
+			Key:            'g',
+			DisabledReason: self.GetGenerateCommitMessageDisabledReason(),
+		},
+		{
 			Label: self.c.Tr.AddCoAuthor,
 			OnPress: func() error {
 				return self.addCoAuthor(suggestionFunc)
@@ -227,6 +266,132 @@ func (self *CommitsHelper) OpenCommitMenu(suggestionFunc func(string) []*types.S
 		Title: self.c.Tr.CommitMenuTitle,
 		Items: menuItems,
 	})
+}
+
+func (self *CommitsHelper) GetGenerateCommitMessageDisabledReason() *types.DisabledReason {
+	if strings.TrimSpace(self.c.UserConfig().Git.Commit.AICommitMessage.Command) != "" {
+		return nil
+	}
+
+	return &types.DisabledReason{
+		Text: self.c.Tr.GenerateCommitMessageDisabled,
+	}
+}
+
+func (self *CommitsHelper) GenerateCommitMessageWithAI() error {
+	if disabledReason := self.GetGenerateCommitMessageDisabledReason(); disabledReason != nil {
+		return errors.New(disabledReason.Text)
+	}
+
+	currentMessage := self.JoinCommitMessageAndUnwrappedDescription()
+	return self.c.ConfirmIf(currentMessage != "", types.ConfirmOpts{
+		Title:  self.c.Tr.GenerateCommitMessage,
+		Prompt: self.c.Tr.SureReplaceCommitMessageWithGenerated,
+		HandleConfirm: func() error {
+			return self.generateCommitMessageWithAI()
+		},
+	})
+}
+
+func (self *CommitsHelper) generateCommitMessageWithAI() error {
+	requestStr, err := self.getGenerateCommitMessageRequest()
+	if err != nil {
+		return err
+	}
+
+	command := strings.TrimSpace(self.c.UserConfig().Git.Commit.AICommitMessage.Command)
+	cmdObj := self.c.OS().Cmd.
+		NewShell(command, self.c.UserConfig().OS.ShellFunctionsFile).
+		SetWd(self.c.Git().RepoPaths.WorktreePath()).
+		SetStdin(requestStr)
+
+	self.c.LogAction(self.c.Tr.Actions.GenerateCommitMessage)
+	return self.c.WithWaitingStatus(self.c.Tr.GeneratingCommitMessage, func(gocui.Task) error {
+		output, err := cmdObj.RunWithOutput()
+		if err != nil {
+			return err
+		}
+
+		response, err := parseGenerateCommitMessageResponse(output)
+		if err != nil {
+			return err
+		}
+
+		self.c.OnUIThread(func() error {
+			self.SetSummaryAndDescriptionInView(response.Title, response.Description)
+			if len(response.Warnings) > 0 {
+				self.c.Toast(strings.Join(response.Warnings, "; "))
+			}
+			return nil
+		})
+
+		return nil
+	})
+}
+
+func (self *CommitsHelper) getGenerateCommitMessageRequest() (string, error) {
+	draft := &generateCommitMessageDraft{
+		Title:       self.getCommitSummary(),
+		Description: self.getUnwrappedCommitDescription(),
+	}
+
+	request := &generateCommitMessageRequest{
+		Version: "1",
+		Cwd:     self.c.Git().RepoPaths.WorktreePath(),
+		Constraints: &generateCommitMessageConstraints{
+			TitleMaxLength: 72,
+		},
+	}
+	if draft.Title != "" || draft.Description != "" {
+		request.Draft = draft
+	}
+
+	payload, err := json.Marshal(request)
+	if err != nil {
+		return "", err
+	}
+
+	return string(payload), nil
+}
+
+func parseGenerateCommitMessageResponse(output string) (*generateCommitMessageResponse, error) {
+	trimmedOutput := strings.TrimSpace(output)
+	if trimmedOutput == "" {
+		return nil, errors.New("AI commit command returned empty output")
+	}
+
+	decoder := json.NewDecoder(strings.NewReader(trimmedOutput))
+	decoder.DisallowUnknownFields()
+
+	var response generateCommitMessageResponse
+	if err := decoder.Decode(&response); err != nil {
+		return nil, fmt.Errorf("invalid AI commit response: %w", err)
+	}
+	if err := ensureEOF(decoder); err != nil {
+		return nil, fmt.Errorf("invalid AI commit response: %w", err)
+	}
+
+	response.Title = strings.TrimSpace(response.Title)
+	response.Description = strings.TrimSpace(response.Description)
+	if response.Title == "" {
+		return nil, errors.New("invalid AI commit response: missing title")
+	}
+	if strings.Contains(response.Title, "\n") {
+		return nil, errors.New("invalid AI commit response: title must be a single line")
+	}
+
+	return &response, nil
+}
+
+func ensureEOF(decoder *json.Decoder) error {
+	var extra any
+	if err := decoder.Decode(&extra); err != io.EOF {
+		if err == nil {
+			return errors.New("unexpected extra JSON content")
+		}
+		return err
+	}
+	return nil
 }
 
 func (self *CommitsHelper) addCoAuthor(suggestionFunc func(string) []*types.Suggestion) error {
