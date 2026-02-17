@@ -130,6 +130,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
 |-----|--------|-------------|
 | `` <enter> `` | Bevestig |  |
 | `` <esc> `` | Sluiten |  |
+| `` <c-g> `` | Generate commit message |  |
 
 ## Commit bestanden
 
@@ -150,6 +151,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
 | `` = `` | Expand all files | Expand all directories in the file tree |
 | `` 0 `` | Focus main view |  |
 | `` / `` | Start met zoeken |  |
+
+## Commit description
+
+| Key | Action | Info |
+|-----|--------|-------------|
+| `` <c-g> `` | Generate commit message |  |
 
 ## Commits
 
