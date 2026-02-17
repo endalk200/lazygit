@@ -1,0 +1,25 @@
+From 27e676c6ca77ab313c280981c14763f826e548fc Mon Sep 17 00:00:00 2001
+From: endalk200 <eb808826@gmail.com>
+Date: Tue, 17 Feb 2026 13:39:39 +0300
+Subject: [PATCH 09/10] fix(ci): use endalk200/homebrew-tap for tap updates
+
+---
+ .github/workflows/update-homebrew-tap.yml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/.github/workflows/update-homebrew-tap.yml b/.github/workflows/update-homebrew-tap.yml
+index fe552b764..267c5aa3e 100644
+--- a/.github/workflows/update-homebrew-tap.yml
++++ b/.github/workflows/update-homebrew-tap.yml
+@@ -87,7 +87,7 @@ jobs:
+       - name: Checkout homebrew tap
+         uses: actions/checkout@v6
+         with:
+-          repository: endalk200/homebrew
++          repository: endalk200/homebrew-tap
+           token: ${{ secrets.HOMEBREW_TAP_PAT }}
+           path: tap
+ 
+-- 
+2.51.2
+
