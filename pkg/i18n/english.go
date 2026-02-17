@@ -421,6 +421,7 @@ type TranslationSet struct {
 	RedoingStatus                         string
 	CheckingOutStatus                     string
 	CommittingStatus                      string
+	GeneratingCommitMessage               string
 	RewordingStatus                       string
 	RevertingStatus                       string
 	CreatingFixupCommitStatus             string
@@ -666,7 +667,10 @@ type TranslationSet struct {
 	CommitHash                            string
 	CommitURL                             string
 	PasteCommitMessageFromClipboard       string
+	GenerateCommitMessage                 string
 	SurePasteCommitMessage                string
+	SureReplaceCommitMessageWithGenerated string
+	GenerateCommitMessageDisabled         string
 	CommitMessage                         string
 	CommitMessageBody                     string
 	CommitSubject                         string
@@ -980,6 +984,7 @@ type Actions struct {
 	ResetCommitAuthor                string
 	SetCommitAuthor                  string
 	AddCommitCoAuthor                string
+	GenerateCommitMessage            string
 	RevertCommit                     string
 	CreateFixupCommit                string
 	SquashAllAboveFixupCommits       string
@@ -1529,6 +1534,7 @@ func EnglishTranslationSet() *TranslationSet {
 		RedoingStatus:                        "Redoing",
 		CheckingOutStatus:                    "Checking out",
 		CommittingStatus:                     "Committing",
+		GeneratingCommitMessage:              "Generating commit message",
 		RewordingStatus:                      "Rewording",
 		RevertingStatus:                      "Reverting",
 		CreatingFixupCommitStatus:            "Creating fixup commit",
@@ -1774,7 +1780,10 @@ func EnglishTranslationSet() *TranslationSet {
 		CommitHash:                               "Commit hash",
 		CommitURL:                                "Commit URL",
 		PasteCommitMessageFromClipboard:          "Paste commit message from clipboard",
+		GenerateCommitMessage:                    "Generate commit message",
 		SurePasteCommitMessage:                   "Pasting will overwrite the current commit message, continue?",
+		SureReplaceCommitMessageWithGenerated:    "Replacing will overwrite the current commit message, continue?",
+		GenerateCommitMessageDisabled:            "Set git.commit.aiCommitMessage.command in your config to enable this action.",
 		CommitMessage:                            "Commit message (subject and body)",
 		CommitMessageBody:                        "Commit message body",
 		CommitSubject:                            "Commit subject",
@@ -2046,6 +2055,7 @@ func EnglishTranslationSet() *TranslationSet {
 			ResetCommitAuthor:                "Reset commit author",
 			SetCommitAuthor:                  "Set commit author",
 			AddCommitCoAuthor:                "Add commit co-author",
+			GenerateCommitMessage:            "Generate commit message",
 			RevertCommit:                     "Revert commit",
 			CreateFixupCommit:                "Create fixup commit",
 			SquashAllAboveFixupCommits:       "Squash all above fixup commits",
