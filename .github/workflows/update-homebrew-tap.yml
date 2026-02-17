@@ -1,0 +1,186 @@
+name: Update Homebrew tap
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+    inputs:
+      tag:
+        description: "Release tag to publish in tap (e.g. v0.59.0-endalk.1)"
+        required: false
+        type: string
+      version:
+        description: "Version without leading v (optional alternative to tag)"
+        required: false
+        type: string
+
+jobs:
+  update-tap:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ secrets.HOMEBREW_TAP_PAT }}
+    steps:
+      - name: Validate tap token
+        run: |
+          if [ -z "${GH_TOKEN}" ]; then
+            echo "Missing HOMEBREW_TAP_PAT secret."
+            exit 1
+          fi
+
+      - name: Resolve release tag and version
+        id: release
+        run: |
+          if [ "${{ github.event_name }}" = "release" ]; then
+            TAG="${{ github.event.release.tag_name }}"
+          elif [ -n "${{ inputs.tag }}" ]; then
+            TAG="${{ inputs.tag }}"
+          elif [ -n "${{ inputs.version }}" ]; then
+            TAG="v${{ inputs.version }}"
+          else
+            echo "Provide either tag or version when running manually."
+            exit 1
+          fi
+
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-endalk\.[0-9]+$ ]]; then
+            echo "Invalid tag format: $TAG"
+            echo "Expected format: vX.Y.Z-endalk.N"
+            exit 1
+          fi
+
+          VERSION="${TAG#v}"
+          {
+            echo "tag=$TAG"
+            echo "version=$VERSION"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Download release checksums
+        run: |
+          rm -f checksums.txt
+          gh release download "${{ steps.release.outputs.tag }}" \
+            --repo endalk200/lazygit \
+            --pattern checksums.txt \
+            --clobber \
+            --dir .
+
+      - name: Extract release hashes
+        id: hashes
+        run: |
+          {
+            echo "darwin_arm64=$(grep '_darwin_arm64.tar.gz$' checksums.txt | awk '{print $1}')"
+            echo "darwin_x64=$(grep '_darwin_x86_64.tar.gz$' checksums.txt | awk '{print $1}')"
+            echo "linux_arm64=$(grep '_linux_arm64.tar.gz$' checksums.txt | awk '{print $1}')"
+            echo "linux_x64=$(grep '_linux_x86_64.tar.gz$' checksums.txt | awk '{print $1}')"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Validate extracted hashes
+        env:
+          DARWIN_ARM64: ${{ steps.hashes.outputs.darwin_arm64 }}
+          DARWIN_X64: ${{ steps.hashes.outputs.darwin_x64 }}
+          LINUX_ARM64: ${{ steps.hashes.outputs.linux_arm64 }}
+          LINUX_X64: ${{ steps.hashes.outputs.linux_x64 }}
+        run: |
+          [ -n "$DARWIN_ARM64" ] || (echo "Missing checksum for darwin_arm64" && exit 1)
+          [ -n "$DARWIN_X64" ] || (echo "Missing checksum for darwin_x64" && exit 1)
+          [ -n "$LINUX_ARM64" ] || (echo "Missing checksum for linux_arm64" && exit 1)
+          [ -n "$LINUX_X64" ] || (echo "Missing checksum for linux_x64" && exit 1)
+
+      - name: Checkout homebrew tap
+        uses: actions/checkout@v6
+        with:
+          repository: endalk200/homebrew
+          token: ${{ secrets.HOMEBREW_TAP_PAT }}
+          path: tap
+
+      - name: Check if formula update is needed
+        id: check
+        run: |
+          FORMULA_PATH="tap/Formula/lazygit-endalk.rb"
+          TARGET_VERSION="${{ steps.release.outputs.version }}"
+
+          if [ -f "$FORMULA_PATH" ]; then
+            CURRENT_VERSION="$(sed -n 's/^\s*version "\([^"]*\)".*/\1/p' "$FORMULA_PATH" | head -n1)"
+            if [ "$CURRENT_VERSION" = "$TARGET_VERSION" ]; then
+              echo "needs_update=false" >> "$GITHUB_OUTPUT"
+              exit 0
+            fi
+          fi
+
+          echo "needs_update=true" >> "$GITHUB_OUTPUT"
+
+      - name: Generate lazygit-endalk formula
+        if: steps.check.outputs.needs_update == 'true'
+        env:
+          VERSION: ${{ steps.release.outputs.version }}
+          DARWIN_ARM64: ${{ steps.hashes.outputs.darwin_arm64 }}
+          DARWIN_X64: ${{ steps.hashes.outputs.darwin_x64 }}
+          LINUX_ARM64: ${{ steps.hashes.outputs.linux_arm64 }}
+          LINUX_X64: ${{ steps.hashes.outputs.linux_x64 }}
+        run: |
+          cat > tap/Formula/lazygit-endalk.rb << 'FORMULA_EOF'
+          # typed: false
+          # frozen_string_literal: true
+
+          class LazygitEndalk < Formula
+            desc "Simple terminal UI for git commands (endalk fork)"
+            homepage "https://github.com/endalk200/lazygit"
+            version "VERSION_PLACEHOLDER"
+            license "MIT"
+
+            on_macos do
+              on_arm do
+                url "https://github.com/endalk200/lazygit/releases/download/v#{version}/lazygit_#{version}_darwin_arm64.tar.gz"
+                sha256 "DARWIN_ARM64_PLACEHOLDER"
+              end
+              on_intel do
+                url "https://github.com/endalk200/lazygit/releases/download/v#{version}/lazygit_#{version}_darwin_x86_64.tar.gz"
+                sha256 "DARWIN_X64_PLACEHOLDER"
+              end
+            end
+
+            on_linux do
+              on_arm do
+                url "https://github.com/endalk200/lazygit/releases/download/v#{version}/lazygit_#{version}_linux_arm64.tar.gz"
+                sha256 "LINUX_ARM64_PLACEHOLDER"
+              end
+              on_intel do
+                url "https://github.com/endalk200/lazygit/releases/download/v#{version}/lazygit_#{version}_linux_x86_64.tar.gz"
+                sha256 "LINUX_X64_PLACEHOLDER"
+              end
+            end
+
+            def install
+              bin.install "lazygit"
+            end
+
+            test do
+              assert_match version.to_s, shell_output("#{bin}/lazygit --version")
+            end
+          end
+          FORMULA_EOF
+
+          sed -i "s/VERSION_PLACEHOLDER/$VERSION/g" tap/Formula/lazygit-endalk.rb
+          sed -i "s/DARWIN_ARM64_PLACEHOLDER/$DARWIN_ARM64/g" tap/Formula/lazygit-endalk.rb
+          sed -i "s/DARWIN_X64_PLACEHOLDER/$DARWIN_X64/g" tap/Formula/lazygit-endalk.rb
+          sed -i "s/LINUX_ARM64_PLACEHOLDER/$LINUX_ARM64/g" tap/Formula/lazygit-endalk.rb
+          sed -i "s/LINUX_X64_PLACEHOLDER/$LINUX_X64/g" tap/Formula/lazygit-endalk.rb
+
+      - name: Create pull request in tap repository
+        if: steps.check.outputs.needs_update == 'true'
+        uses: peter-evans/create-pull-request@v7
+        with:
+          token: ${{ secrets.HOMEBREW_TAP_PAT }}
+          path: tap
+          commit-message: "Update lazygit-endalk to ${{ steps.release.outputs.version }}"
+          title: "Update lazygit-endalk to ${{ steps.release.outputs.version }}"
+          body: |
+            Automated update of `lazygit-endalk` formula to `${{ steps.release.outputs.version }}`.
+
+            Release: [${{ steps.release.outputs.tag }}](https://github.com/endalk200/lazygit/releases/tag/${{ steps.release.outputs.tag }})
+
+            Checksums:
+            - darwin-arm64: `${{ steps.hashes.outputs.darwin_arm64 }}`
+            - darwin-x64: `${{ steps.hashes.outputs.darwin_x64 }}`
+            - linux-arm64: `${{ steps.hashes.outputs.linux_arm64 }}`
+            - linux-x64: `${{ steps.hashes.outputs.linux_x64 }}`
+          branch: update-lazygit-endalk-${{ steps.release.outputs.version }}
+          delete-branch: true
