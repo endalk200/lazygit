@@ -1,0 +1,342 @@
+From 451059765927a14b4fc40bf8f20fc07e1dc4c5a6 Mon Sep 17 00:00:00 2001
+From: endalk200 <eb808826@gmail.com>
+Date: Tue, 17 Feb 2026 13:24:43 +0300
+Subject: [PATCH 08/10] Update docs and schema for release
+
+---
+ docs/PatchMaintenance.md              | 104 --------------------------
+ docs/keybindings/Keybindings_en.md    |   7 ++
+ docs/keybindings/Keybindings_ja.md    |   7 ++
+ docs/keybindings/Keybindings_ko.md    |   7 ++
+ docs/keybindings/Keybindings_nl.md    |   7 ++
+ docs/keybindings/Keybindings_pl.md    |   7 ++
+ docs/keybindings/Keybindings_pt.md    |   7 ++
+ docs/keybindings/Keybindings_ru.md    |   7 ++
+ docs/keybindings/Keybindings_zh-CN.md |   7 ++
+ docs/keybindings/Keybindings_zh-TW.md |   7 ++
+ 10 files changed, 63 insertions(+), 104 deletions(-)
+ delete mode 100644 docs/PatchMaintenance.md
+
+diff --git a/docs/PatchMaintenance.md b/docs/PatchMaintenance.md
+deleted file mode 100644
+index accd56fa9..000000000
+--- a/docs/PatchMaintenance.md
++++ /dev/null
+@@ -1,104 +0,0 @@
+-# Patch Maintenance Runbook
+-
+-This runbook defines how to keep the fork aligned with upstream while preserving custom features as a patch queue.
+-
+-## One-time setup
+-
+-1. Ensure remotes are configured:
+-   - `origin`: `endalk200/lazygit`
+-   - `upstream`: `jesseduffield/lazygit`
+-2. Enable rerere so recurring conflicts are auto-resolved after the first manual fix:
+-   - `git config --global rerere.enabled true`
+-   - `git config --global rerere.autoupdate true`
+-
+-## Patch queue structure
+-
+-- Patch files live in `patches/series/`.
+-- Patch order is defined in `patches/series/series`.
+-- Scripts:
+-  - `scripts/bootstrap_patch_branch.sh`
+-  - `scripts/refresh_patches.sh`
+-  - `scripts/apply_patches.sh`
+-
+-## Bootstrap the first patch branch
+-
+-If your feature exists as uncommitted changes, run:
+-
+-```bash
+-scripts/bootstrap_patch_branch.sh
+-```
+-
+-The script:
+-
+-- creates `patches/ai-generated-commit-message`
+-- groups commits by logical area
+-- generates `git format-patch` files into `patches/series/`
+-
+-## Routine upstream sync
+-
+-1. Fetch upstream:
+-   - `git fetch upstream`
+-2. Create sync branch from upstream:
+-   - `git checkout -b sync/upstream-$(date +%Y%m%d)-$(git rev-parse --short upstream/master) upstream/master`
+-3. Apply patch queue:
+-   - `scripts/apply_patches.sh`
+-4. Validate:
+-   - `go test ./... -short`
+-   - `go run cmd/integration_test/main.go cli GenerateCommitMessage GenerateCommitMessageMalformedResponse`
+-5. Push branch and open PR to `origin/master`.
+-
+-You can also rely on `.github/workflows/sync-upstream.yml` for the automated version of this flow.
+-
+-## Refresh patches after edits
+-
+-When you change custom commits on your patch branch:
+-
+-```bash
+-scripts/refresh_patches.sh
+-```
+-
+-This rewrites patch files and updates `patches/series/series`.
+-
+-## Release checklist
+-
+-1. Confirm patch queue applies cleanly to latest upstream.
+-2. Confirm docs/schema consistency:
+-   - `diff -r -q docs docs-master`
+-   - `diff -r -q schema schema-master`
+-3. Run targeted validations:
+-   - `go test ./... -short`
+-   - `go run cmd/integration_test/main.go cli GenerateCommitMessage GenerateCommitMessageMalformedResponse`
+-4. Create release tag using fork scheme:
+-   - `vX.Y.Z-endalk.N`
+-5. Run release workflow (`.github/workflows/release.yml`) and verify:
+-   - all expected assets are present
+-   - `checksums.txt` is uploaded
+-6. Confirm tap update workflow opened a formula PR in `endalk200/homebrew`.
+-
+-## Rollback and recovery
+-
+-If release binaries are broken:
+-
+-1. Cut a new patch release tag with incremented suffix (do not reuse tag):
+-   - `vX.Y.Z-endalk.(N+1)`
+-2. Re-run release workflow for the fixed tag.
+-3. Close superseded tap PR and merge the new one.
+-
+-If patch application fails:
+-
+-1. Resolve conflicts.
+-2. Continue: `git am --continue`
+-3. Or abort: `git am --abort`
+-4. After successful resolution, regenerate patches:
+-   - `scripts/refresh_patches.sh`
+-
+-If tap update produced a bad formula PR:
+-
+-1. Close or revert the PR in `endalk200/homebrew`.
+-2. Re-run the updater workflow with the corrected release tag.
+-
+-## Health checks
+-
+-- `sync-upstream.yml` runs on a schedule to detect drift and conflicts early.
+-- `update-homebrew-tap.yml` updates formulae when new fork releases are published.
+-- If either workflow fails, inspect logs and fix before cutting the next release.
+diff --git a/docs/keybindings/Keybindings_en.md b/docs/keybindings/Keybindings_en.md
+index 76b02512c..fd68bfe2e 100644
+--- a/docs/keybindings/Keybindings_en.md
++++ b/docs/keybindings/Keybindings_en.md
+@@ -53,6 +53,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+ | `` ] `` | Next tab |  |
+ | `` [ `` | Previous tab |  |
+ 
++## Commit description
++
++| Key | Action | Info |
++|-----|--------|-------------|
++| `` <c-g> `` | Generate commit message |  |
++
+ ## Commit files
+ 
+ | Key | Action | Info |
+@@ -79,6 +85,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+ |-----|--------|-------------|
+ | `` <enter> `` | Confirm |  |
+ | `` <esc> `` | Close |  |
++| `` <c-g> `` | Generate commit message |  |
+ 
+ ## Commits
+ 
+diff --git a/docs/keybindings/Keybindings_ja.md b/docs/keybindings/Keybindings_ja.md
+index b657aa794..27b25b7bc 100644
+--- a/docs/keybindings/Keybindings_ja.md
++++ b/docs/keybindings/Keybindings_ja.md
+@@ -127,6 +127,13 @@ _凡例：`＜c-b＞` はctrl+b、`＜a-b＞` はalt+b、`B` はshift+bを意味
+ |-----|--------|-------------|
+ | `` <enter> `` | 確認 |  |
+ | `` <esc> `` | 閉じる |  |
++| `` <c-g> `` | Generate commit message |  |
++
++## コミット詳細
++
++| Key | Action | Info |
++|-----|--------|-------------|
++| `` <c-g> `` | Generate commit message |  |
+ 
+ ## サブコミット
+ 
+diff --git a/docs/keybindings/Keybindings_ko.md b/docs/keybindings/Keybindings_ko.md
+index 0860c8571..3ce0f117c 100644
+--- a/docs/keybindings/Keybindings_ko.md
++++ b/docs/keybindings/Keybindings_ko.md
+@@ -53,6 +53,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+ | `` ] `` | 이전 탭 |  |
+ | `` [ `` | 다음 탭 |  |
+ 
++## Commit description
++
++| Key | Action | Info |
++|-----|--------|-------------|
++| `` <c-g> `` | Generate commit message |  |
++
+ ## Input prompt
+ 
+ | Key | Action | Info |
+@@ -356,6 +362,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+ |-----|--------|-------------|
+ | `` <enter> `` | 확인 |  |
+ | `` <esc> `` | 닫기 |  |
++| `` <c-g> `` | Generate commit message |  |
+ 
+ ## 태그
+ 
+diff --git a/docs/keybindings/Keybindings_nl.md b/docs/keybindings/Keybindings_nl.md
+index 0bfffcb3d..6f25bf9ee 100644
+--- a/docs/keybindings/Keybindings_nl.md
++++ b/docs/keybindings/Keybindings_nl.md
+@@ -130,6 +130,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+ |-----|--------|-------------|
+ | `` <enter> `` | Bevestig |  |
+ | `` <esc> `` | Sluiten |  |
++| `` <c-g> `` | Generate commit message |  |
+ 
+ ## Commit bestanden
+ 
+@@ -151,6 +152,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+ | `` 0 `` | Focus main view |  |
+ | `` / `` | Start met zoeken |  |
+ 
++## Commit description
++
++| Key | Action | Info |
++|-----|--------|-------------|
++| `` <c-g> `` | Generate commit message |  |
++
+ ## Commits
+ 
+ | Key | Action | Info |
+diff --git a/docs/keybindings/Keybindings_pl.md b/docs/keybindings/Keybindings_pl.md
+index 656f16a76..bedf400a6 100644
+--- a/docs/keybindings/Keybindings_pl.md
++++ b/docs/keybindings/Keybindings_pl.md
+@@ -172,6 +172,12 @@ _Legenda: `<c-b>` oznacza ctrl+b, `<a-b>` oznacza alt+b, `B` oznacza shift+b_
+ | `` <esc> `` | Zamknij/Anuluj |  |
+ | `` / `` | Filtruj bieżący widok po tekście |  |
+ 
++## Opis commita
++
++| Key | Action | Info |
++|-----|--------|-------------|
++| `` <c-g> `` | Generate commit message |  |
++
+ ## Panel główny (normalny)
+ 
+ | Key | Action | Info |
+@@ -287,6 +293,7 @@ _Legenda: `<c-b>` oznacza ctrl+b, `<a-b>` oznacza alt+b, `B` oznacza shift+b_
+ |-----|--------|-------------|
+ | `` <enter> `` | Potwierdź |  |
+ | `` <esc> `` | Zamknij |  |
++| `` <c-g> `` | Generate commit message |  |
+ 
+ ## Reflog
+ 
+diff --git a/docs/keybindings/Keybindings_pt.md b/docs/keybindings/Keybindings_pt.md
+index c9e5d3bf4..28505c4cd 100644
+--- a/docs/keybindings/Keybindings_pt.md
++++ b/docs/keybindings/Keybindings_pt.md
+@@ -204,6 +204,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+ | `` <esc> `` | Fechar/Cancelar |  |
+ | `` <c-o> `` | Copy to clipboard |  |
+ 
++## Descrição de Commit
++
++| Key | Action | Info |
++|-----|--------|-------------|
++| `` <c-g> `` | Generate commit message |  |
++
+ ## Etiquetas
+ 
+ | Key | Action | Info |
+@@ -403,6 +409,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+ |-----|--------|-------------|
+ | `` <enter> `` | Confirmar |  |
+ | `` <esc> `` | Fechar |  |
++| `` <c-g> `` | Generate commit message |  |
+ 
+ ## Worktrees
+ 
+diff --git a/docs/keybindings/Keybindings_ru.md b/docs/keybindings/Keybindings_ru.md
+index df0a4ce1f..2562aa214 100644
+--- a/docs/keybindings/Keybindings_ru.md
++++ b/docs/keybindings/Keybindings_ru.md
+@@ -240,6 +240,12 @@ _Связки клавиш_
+ | `` <esc> `` | Закрыть/отменить |  |
+ | `` / `` | Filter the current view by text |  |
+ 
++## Описание коммита
++
++| Key | Action | Info |
++|-----|--------|-------------|
++| `` <c-g> `` | Generate commit message |  |
++
+ ## Панель Подтверждения
+ 
+ | Key | Action | Info |
+@@ -288,6 +294,7 @@ _Связки клавиш_
+ |-----|--------|-------------|
+ | `` <enter> `` | Подтвердить |  |
+ | `` <esc> `` | Закрыть |  |
++| `` <c-g> `` | Generate commit message |  |
+ 
+ ## Сохранить Изменения Файлов
+ 
+diff --git a/docs/keybindings/Keybindings_zh-CN.md b/docs/keybindings/Keybindings_zh-CN.md
+index 169dbb9c8..9f655ab9c 100644
+--- a/docs/keybindings/Keybindings_zh-CN.md
++++ b/docs/keybindings/Keybindings_zh-CN.md
+@@ -164,6 +164,13 @@ _图例：`<c-b>` 意味着ctrl+b, `<a-b>意味着Alt+b, `B` 意味着shift+b_
+ |-----|--------|-------------|
+ | `` <enter> `` | 确认 |  |
+ | `` <esc> `` | 关闭 |  |
++| `` <c-g> `` | Generate commit message |  |
++
++## 提交信息说明
++
++| Key | Action | Info |
++|-----|--------|-------------|
++| `` <c-g> `` | Generate commit message |  |
+ 
+ ## 提交文件
+ 
+diff --git a/docs/keybindings/Keybindings_zh-TW.md b/docs/keybindings/Keybindings_zh-TW.md
+index 107976c26..6f5ce6f47 100644
+--- a/docs/keybindings/Keybindings_zh-TW.md
++++ b/docs/keybindings/Keybindings_zh-TW.md
+@@ -216,12 +216,19 @@ _說明：`<c-b>` 表示 Ctrl＋B、`<a-b>` 表示 Alt＋B，`B`表示 Shift＋B
+ | `` w `` | 檢視工作目錄選項 |  |
+ | `` / `` | 搜尋 |  |
+ 
++## 提交描述
++
++| Key | Action | Info |
++|-----|--------|-------------|
++| `` <c-g> `` | Generate commit message |  |
++
+ ## 提交摘要
+ 
+ | Key | Action | Info |
+ |-----|--------|-------------|
+ | `` <enter> `` | 確認 |  |
+ | `` <esc> `` | 關閉 |  |
++| `` <c-g> `` | Generate commit message |  |
+ 
+ ## 提交檔案
+ 
+-- 
+2.51.2
+
