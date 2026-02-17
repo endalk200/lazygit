@@ -53,6 +53,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
 | `` ] `` | 이전 탭 |  |
 | `` [ `` | 다음 탭 |  |
 
+## Commit description
+
+| Key | Action | Info |
+|-----|--------|-------------|
+| `` <c-g> `` | Generate commit message |  |
+
 ## Input prompt
 
 | Key | Action | Info |
@@ -356,6 +362,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
 |-----|--------|-------------|
 | `` <enter> `` | 확인 |  |
 | `` <esc> `` | 닫기 |  |
+| `` <c-g> `` | Generate commit message |  |
 
 ## 태그
 
