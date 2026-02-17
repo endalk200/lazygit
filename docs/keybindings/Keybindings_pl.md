@@ -172,6 +172,12 @@ _Legenda: `<c-b>` oznacza ctrl+b, `<a-b>` oznacza alt+b, `B` oznacza shift+b_
 | `` <esc> `` | Zamknij/Anuluj |  |
 | `` / `` | Filtruj bieżący widok po tekście |  |
 
+## Opis commita
+
+| Key | Action | Info |
+|-----|--------|-------------|
+| `` <c-g> `` | Generate commit message |  |
+
 ## Panel główny (normalny)
 
 | Key | Action | Info |
@@ -287,6 +293,7 @@ _Legenda: `<c-b>` oznacza ctrl+b, `<a-b>` oznacza alt+b, `B` oznacza shift+b_
 |-----|--------|-------------|
 | `` <enter> `` | Potwierdź |  |
 | `` <esc> `` | Zamknij |  |
+| `` <c-g> `` | Generate commit message |  |
 
 ## Reflog
 
