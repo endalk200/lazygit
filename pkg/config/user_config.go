@@ -355,6 +355,14 @@ type CommitConfig struct {
 	AutoWrapCommitMessage bool `yaml:"autoWrapCommitMessage"`
 	// If autoWrapCommitMessage is true, the width to wrap to
 	AutoWrapWidth int `yaml:"autoWrapWidth"`
+	// Configuration for generating commit messages via an external command.
+	AICommitMessage AICommitMessageConfig `yaml:"aiCommitMessage"`
+}
+
+type AICommitMessageConfig struct {
+	// Command to run for generating a commit title and description.
+	// The command is executed from the repository root.
+	Command string `yaml:"command"`
 }
 
 type MergingConfig struct {
@@ -602,7 +610,8 @@ type KeybindingSubmodulesConfig struct {
 }
 
 type KeybindingCommitMessageConfig struct {
-	CommitMenu string `yaml:"commitMenu"`
+	CommitMenu            string `yaml:"commitMenu"`
+	GenerateCommitMessage string `yaml:"generateCommitMessage"`
 }
 
 // OSConfig contains config on the level of the os
@@ -827,6 +836,9 @@ func GetDefaultConfig() *UserConfig {
 				SignOff:               false,
 				AutoWrapCommitMessage: true,
 				AutoWrapWidth:         72,
+				AICommitMessage: AICommitMessageConfig{
+					Command: "",
+				},
 			},
 			Merging: MergingConfig{
 				ManualCommit:       false,
@@ -1054,7 +1066,8 @@ func GetDefaultConfig() *UserConfig {
 				BulkMenu: "b",
 			},
 			CommitMessage: KeybindingCommitMessageConfig{
-				CommitMenu: "<c-o>",
+				CommitMenu:            "<c-o>",
+				GenerateCommitMessage: "<c-g>",
 			},
 		},
 	}
