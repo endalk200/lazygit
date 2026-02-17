@@ -1,0 +1,151 @@
+From b9d93cc9e4d340b7c4469726d4f63ca9d535d0f2 Mon Sep 17 00:00:00 2001
+From: endalk200 <eb808826@gmail.com>
+Date: Tue, 17 Feb 2026 13:09:19 +0300
+Subject: [PATCH 1/5] feat(config): add AI commit message configuration
+
+---
+ pkg/config/user_config.go | 17 +++++++++++++++--
+ schema-master/config.json | 19 +++++++++++++++++++
+ schema/config.json        | 19 +++++++++++++++++++
+ 3 files changed, 53 insertions(+), 2 deletions(-)
+
+diff --git a/pkg/config/user_config.go b/pkg/config/user_config.go
+index abf591801..9c466907e 100644
+--- a/pkg/config/user_config.go
++++ b/pkg/config/user_config.go
+@@ -355,6 +355,14 @@ type CommitConfig struct {
+ 	AutoWrapCommitMessage bool `yaml:"autoWrapCommitMessage"`
+ 	// If autoWrapCommitMessage is true, the width to wrap to
+ 	AutoWrapWidth int `yaml:"autoWrapWidth"`
++	// Configuration for generating commit messages via an external command.
++	AICommitMessage AICommitMessageConfig `yaml:"aiCommitMessage"`
++}
++
++type AICommitMessageConfig struct {
++	// Command to run for generating a commit title and description.
++	// The command is executed from the repository root.
++	Command string `yaml:"command"`
+ }
+ 
+ type MergingConfig struct {
+@@ -602,7 +610,8 @@ type KeybindingSubmodulesConfig struct {
+ }
+ 
+ type KeybindingCommitMessageConfig struct {
+-	CommitMenu string `yaml:"commitMenu"`
++	CommitMenu            string `yaml:"commitMenu"`
++	GenerateCommitMessage string `yaml:"generateCommitMessage"`
+ }
+ 
+ // OSConfig contains config on the level of the os
+@@ -827,6 +836,9 @@ func GetDefaultConfig() *UserConfig {
+ 				SignOff:               false,
+ 				AutoWrapCommitMessage: true,
+ 				AutoWrapWidth:         72,
++				AICommitMessage: AICommitMessageConfig{
++					Command: "",
++				},
+ 			},
+ 			Merging: MergingConfig{
+ 				ManualCommit:       false,
+@@ -1054,7 +1066,8 @@ func GetDefaultConfig() *UserConfig {
+ 				BulkMenu: "b",
+ 			},
+ 			CommitMessage: KeybindingCommitMessageConfig{
+-				CommitMenu: "<c-o>",
++				CommitMenu:            "<c-o>",
++				GenerateCommitMessage: "<c-g>",
+ 			},
+ 		},
+ 	}
+diff --git a/schema-master/config.json b/schema-master/config.json
+index 0e880b066..7351148c4 100644
+--- a/schema-master/config.json
++++ b/schema-master/config.json
+@@ -3,6 +3,17 @@
+   "$id": "https://github.com/jesseduffield/lazygit/pkg/config/user-config",
+   "$ref": "#/$defs/UserConfig",
+   "$defs": {
++    "AICommitMessageConfig": {
++      "properties": {
++        "command": {
++          "type": "string",
++          "description": "Command to run for generating a commit title and description.\nThe command is executed from the repository root."
++        }
++      },
++      "additionalProperties": false,
++      "type": "object",
++      "description": "Configuration for generating commit messages via an external command."
++    },
+     "CommitConfig": {
+       "properties": {
+         "signOff": {
+@@ -19,6 +30,10 @@
+           "type": "integer",
+           "description": "If autoWrapCommitMessage is true, the width to wrap to",
+           "default": 72
++        },
++        "aiCommitMessage": {
++          "$ref": "#/$defs/AICommitMessageConfig",
++          "description": "Configuration for generating commit messages via an external command."
+         }
+       },
+       "additionalProperties": false,
+@@ -919,6 +934,10 @@
+         "commitMenu": {
+           "type": "string",
+           "default": "\u003cc-o\u003e"
++        },
++        "generateCommitMessage": {
++          "type": "string",
++          "default": "\u003cc-g\u003e"
+         }
+       },
+       "additionalProperties": false,
+diff --git a/schema/config.json b/schema/config.json
+index 0e880b066..7351148c4 100644
+--- a/schema/config.json
++++ b/schema/config.json
+@@ -3,6 +3,17 @@
+   "$id": "https://github.com/jesseduffield/lazygit/pkg/config/user-config",
+   "$ref": "#/$defs/UserConfig",
+   "$defs": {
++    "AICommitMessageConfig": {
++      "properties": {
++        "command": {
++          "type": "string",
++          "description": "Command to run for generating a commit title and description.\nThe command is executed from the repository root."
++        }
++      },
++      "additionalProperties": false,
++      "type": "object",
++      "description": "Configuration for generating commit messages via an external command."
++    },
+     "CommitConfig": {
+       "properties": {
+         "signOff": {
+@@ -19,6 +30,10 @@
+           "type": "integer",
+           "description": "If autoWrapCommitMessage is true, the width to wrap to",
+           "default": 72
++        },
++        "aiCommitMessage": {
++          "$ref": "#/$defs/AICommitMessageConfig",
++          "description": "Configuration for generating commit messages via an external command."
+         }
+       },
+       "additionalProperties": false,
+@@ -919,6 +934,10 @@
+         "commitMenu": {
+           "type": "string",
+           "default": "\u003cc-o\u003e"
++        },
++        "generateCommitMessage": {
++          "type": "string",
++          "default": "\u003cc-g\u003e"
+         }
+       },
+       "additionalProperties": false,
+-- 
+2.51.2
+
