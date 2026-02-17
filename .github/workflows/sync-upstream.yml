@@ -1,0 +1,106 @@
+name: Sync upstream
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "0 9 * * 1-5"
+
+concurrency:
+  group: sync-upstream-master
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+
+      - name: Configure git identity
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Configure upstream remote
+        run: |
+          if git remote get-url upstream >/dev/null 2>&1; then
+            git remote set-url upstream https://github.com/jesseduffield/lazygit.git
+          else
+            git remote add upstream https://github.com/jesseduffield/lazygit.git
+          fi
+
+      - name: Fetch latest refs
+        run: |
+          git fetch upstream master
+          git fetch origin master
+
+      - name: Create sync branch from upstream
+        id: sync_branch
+        run: |
+          UPSTREAM_SHA="$(git rev-parse --short upstream/master)"
+          TIMESTAMP="$(date +%Y%m%d%H%M%S)"
+          BRANCH_NAME="sync/upstream-${TIMESTAMP}-${UPSTREAM_SHA}"
+
+          git checkout -b "$BRANCH_NAME" upstream/master
+
+          {
+            echo "upstream_sha=$UPSTREAM_SHA"
+            echo "branch_name=$BRANCH_NAME"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Apply patch queue
+        run: scripts/apply_patches.sh
+
+      - name: Setup Go
+        uses: actions/setup-go@v6
+        with:
+          go-version: 1.25.x
+
+      - name: Validate patch build and tests
+        env:
+          GOFLAGS: -mod=vendor
+        run: |
+          go test ./... -short
+          go test ./pkg/gui/controllers/helpers -run TestParseGenerateCommitMessageResponse
+          go run cmd/integration_test/main.go cli GenerateCommitMessage GenerateCommitMessageMalformedResponse
+
+      - name: Check if sync changes exist
+        id: check_changes
+        run: |
+          if git diff --quiet origin/master...HEAD; then
+            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Push sync branch
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: git push -u origin "${{ steps.sync_branch.outputs.branch_name }}"
+
+      - name: Open pull request
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          gh pr create \
+            --base master \
+            --head "${{ steps.sync_branch.outputs.branch_name }}" \
+            --title "sync: upstream/master @ ${{ steps.sync_branch.outputs.upstream_sha }}" \
+            --body "$(cat <<'EOF'
+          ## Summary
+          - Sync branch rebased to latest `upstream/master`
+          - Reapplied local patch queue from `patches/series`
+          - Ran short unit tests and AI commit-message integration tests
+
+          ## Validation
+          - `go test ./... -short`
+          - `go test ./pkg/gui/controllers/helpers -run TestParseGenerateCommitMessageResponse`
+          - `go run cmd/integration_test/main.go cli GenerateCommitMessage GenerateCommitMessageMalformedResponse`
+          EOF
+          )"
