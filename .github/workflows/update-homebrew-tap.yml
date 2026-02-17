@@ -87,7 +87,7 @@ jobs:
       - name: Checkout homebrew tap
         uses: actions/checkout@v6
         with:
-          repository: endalk200/homebrew
+          repository: endalk200/homebrew-tap
           token: ${{ secrets.HOMEBREW_TAP_PAT }}
           path: tap
 
