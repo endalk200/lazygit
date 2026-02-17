@@ -3,3 +3,8 @@
 0003-feat-i18n-add-generate-commit-message-strings.patch
 0004-docs-config-document-AI-commit-message-settings.patch
 0005-test-integration-cover-AI-commit-message-generation.patch
+0006-chore-fork-add-patch-maintenance-and-automation-work.patch
+0007-chore-patches-add-AI-commit-message-patch-series.patch
+0008-Update-docs-and-schema-for-release.patch
+0009-fix-ci-use-endalk200-homebrew-tap-for-tap-updates.patch
+0010-docs-readme-add-fork-notice-and-fork-install-guidanc.patch

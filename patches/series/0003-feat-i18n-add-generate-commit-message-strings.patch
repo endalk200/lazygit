@@ -1,7 +1,7 @@
-From 598b2a3761269125f9717d741c6417de4df50dbd Mon Sep 17 00:00:00 2001
+From 582a27135c57531c4764ca428795d130042e3850 Mon Sep 17 00:00:00 2001
 From: endalk200 <eb808826@gmail.com>
 Date: Tue, 17 Feb 2026 13:09:19 +0300
-Subject: [PATCH 3/5] feat(i18n): add generate commit message strings
+Subject: [PATCH 03/10] feat(i18n): add generate commit message strings
 
 ---
  pkg/i18n/english.go | 10 ++++++++++
