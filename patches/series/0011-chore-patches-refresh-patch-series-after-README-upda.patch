@@ -1,0 +1,2619 @@
+From 770104a5e53e6a050d20904317dcc467ff4702e8 Mon Sep 17 00:00:00 2001
+From: endalk200 <eb808826@gmail.com>
+Date: Tue, 17 Feb 2026 14:20:40 +0300
+Subject: [PATCH 11/12] chore(patches): refresh patch series after README
+ updates
+
+---
+ ...-add-AI-commit-message-configuration.patch |    4 +-
+ ...e-commit-message-from-external-comma.patch |    5 +-
+ ...-add-generate-commit-message-strings.patch |    4 +-
+ ...-document-AI-commit-message-settings.patch |    4 +-
+ ...n-cover-AI-commit-message-generation.patch |    4 +-
+ ...atch-maintenance-and-automation-work.patch |  920 ++++++++++++++
+ ...s-add-AI-commit-message-patch-series.patch | 1060 +++++++++++++++++
+ ...8-Update-docs-and-schema-for-release.patch |  342 ++++++
+ ...dalk200-homebrew-tap-for-tap-updates.patch |   25 +
+ ...fork-notice-and-fork-install-guidanc.patch |  130 ++
+ patches/series/series                         |    5 +
+ 11 files changed, 2493 insertions(+), 10 deletions(-)
+ create mode 100644 patches/series/0006-chore-fork-add-patch-maintenance-and-automation-work.patch
+ create mode 100644 patches/series/0007-chore-patches-add-AI-commit-message-patch-series.patch
+ create mode 100644 patches/series/0008-Update-docs-and-schema-for-release.patch
+ create mode 100644 patches/series/0009-fix-ci-use-endalk200-homebrew-tap-for-tap-updates.patch
+ create mode 100644 patches/series/0010-docs-readme-add-fork-notice-and-fork-install-guidanc.patch
+
+diff --git a/patches/series/0001-feat-config-add-AI-commit-message-configuration.patch b/patches/series/0001-feat-config-add-AI-commit-message-configuration.patch
+index fdc75baed..0e3ba29e3 100644
+--- a/patches/series/0001-feat-config-add-AI-commit-message-configuration.patch
++++ b/patches/series/0001-feat-config-add-AI-commit-message-configuration.patch
+@@ -1,7 +1,7 @@
+-From b9d93cc9e4d340b7c4469726d4f63ca9d535d0f2 Mon Sep 17 00:00:00 2001
++From 079859c3a1d711bd0c1f7175db9813a7b8e4714e Mon Sep 17 00:00:00 2001
+ From: endalk200 <eb808826@gmail.com>
+ Date: Tue, 17 Feb 2026 13:09:19 +0300
+-Subject: [PATCH 1/5] feat(config): add AI commit message configuration
++Subject: [PATCH 01/10] feat(config): add AI commit message configuration
+ 
+ ---
+  pkg/config/user_config.go | 17 +++++++++++++++--
+diff --git a/patches/series/0002-feat-gui-generate-commit-message-from-external-comma.patch b/patches/series/0002-feat-gui-generate-commit-message-from-external-comma.patch
+index c33c0a4eb..5e12f9d41 100644
+--- a/patches/series/0002-feat-gui-generate-commit-message-from-external-comma.patch
++++ b/patches/series/0002-feat-gui-generate-commit-message-from-external-comma.patch
+@@ -1,7 +1,8 @@
+-From d5740b764ff2b26c47a9dfc1b2d00ffd2a2f23cb Mon Sep 17 00:00:00 2001
++From 83d9049e43c55e3d97dfe46b5ca83403b54f2a04 Mon Sep 17 00:00:00 2001
+ From: endalk200 <eb808826@gmail.com>
+ Date: Tue, 17 Feb 2026 13:09:19 +0300
+-Subject: [PATCH 2/5] feat(gui): generate commit message from external command
++Subject: [PATCH 02/10] feat(gui): generate commit message from external
++ command
+ 
+ ---
+  pkg/gui/context/commit_message_context.go     |   8 +-
+diff --git a/patches/series/0003-feat-i18n-add-generate-commit-message-strings.patch b/patches/series/0003-feat-i18n-add-generate-commit-message-strings.patch
+index 671c955c8..b78b88434 100644
+--- a/patches/series/0003-feat-i18n-add-generate-commit-message-strings.patch
++++ b/patches/series/0003-feat-i18n-add-generate-commit-message-strings.patch
+@@ -1,7 +1,7 @@
+-From 598b2a3761269125f9717d741c6417de4df50dbd Mon Sep 17 00:00:00 2001
++From 582a27135c57531c4764ca428795d130042e3850 Mon Sep 17 00:00:00 2001
+ From: endalk200 <eb808826@gmail.com>
+ Date: Tue, 17 Feb 2026 13:09:19 +0300
+-Subject: [PATCH 3/5] feat(i18n): add generate commit message strings
++Subject: [PATCH 03/10] feat(i18n): add generate commit message strings
+ 
+ ---
+  pkg/i18n/english.go | 10 ++++++++++
+diff --git a/patches/series/0004-docs-config-document-AI-commit-message-settings.patch b/patches/series/0004-docs-config-document-AI-commit-message-settings.patch
+index 952497ab6..626166c8b 100644
+--- a/patches/series/0004-docs-config-document-AI-commit-message-settings.patch
++++ b/patches/series/0004-docs-config-document-AI-commit-message-settings.patch
+@@ -1,7 +1,7 @@
+-From 227bb0c77bac8a90c18c7791e96ae0d33bd33a9e Mon Sep 17 00:00:00 2001
++From ff3b30599c5a8cecb9c242802889f69479524eaf Mon Sep 17 00:00:00 2001
+ From: endalk200 <eb808826@gmail.com>
+ Date: Tue, 17 Feb 2026 13:09:19 +0300
+-Subject: [PATCH 4/5] docs(config): document AI commit message settings
++Subject: [PATCH 04/10] docs(config): document AI commit message settings
+ 
+ ---
+  docs-master/Config.md                        | 7 +++++++
+diff --git a/patches/series/0005-test-integration-cover-AI-commit-message-generation.patch b/patches/series/0005-test-integration-cover-AI-commit-message-generation.patch
+index 8da2e5fb9..cfaa398a5 100644
+--- a/patches/series/0005-test-integration-cover-AI-commit-message-generation.patch
++++ b/patches/series/0005-test-integration-cover-AI-commit-message-generation.patch
+@@ -1,7 +1,7 @@
+-From 03dd48b9a9267854799bbdea0b36ea8e35abe2ee Mon Sep 17 00:00:00 2001
++From 413967fbf228557fc4ee9eda7e25dad600f76b3d Mon Sep 17 00:00:00 2001
+ From: endalk200 <eb808826@gmail.com>
+ Date: Tue, 17 Feb 2026 13:09:19 +0300
+-Subject: [PATCH 5/5] test(integration): cover AI commit message generation
++Subject: [PATCH 05/10] test(integration): cover AI commit message generation
+ 
+ ---
+  .../tests/commit/generate_commit_message.go   | 42 +++++++++++++++++++
+diff --git a/patches/series/0006-chore-fork-add-patch-maintenance-and-automation-work.patch b/patches/series/0006-chore-fork-add-patch-maintenance-and-automation-work.patch
+new file mode 100644
+index 000000000..5b13bc5b2
+--- /dev/null
++++ b/patches/series/0006-chore-fork-add-patch-maintenance-and-automation-work.patch
+@@ -0,0 +1,920 @@
++From 6cd17849ddd0d4be14f0b5620d9098ace2de750b Mon Sep 17 00:00:00 2001
++From: endalk200 <eb808826@gmail.com>
++Date: Tue, 17 Feb 2026 13:11:23 +0300
++Subject: [PATCH 06/10] chore(fork): add patch maintenance and automation
++ workflows
++
++---
++ .github/workflows/release.yml             | 164 +++++--------------
++ .github/workflows/sync-upstream.yml       | 106 ++++++++++++
++ .github/workflows/update-homebrew-tap.yml | 186 ++++++++++++++++++++++
++ docs/PatchMaintenance.md                  | 104 ++++++++++++
++ patches/README.md                         |  19 +++
++ patches/series/.gitkeep                   |   1 +
++ scripts/apply_patches.sh                  |  55 +++++++
++ scripts/bootstrap_patch_branch.sh         |  95 +++++++++++
++ scripts/refresh_patches.sh                |  36 +++++
++ scripts/update_docs_for_release.sh        |  13 +-
++ 10 files changed, 655 insertions(+), 124 deletions(-)
++ create mode 100644 .github/workflows/sync-upstream.yml
++ create mode 100644 .github/workflows/update-homebrew-tap.yml
++ create mode 100644 docs/PatchMaintenance.md
++ create mode 100644 patches/README.md
++ create mode 100644 patches/series/.gitkeep
++ create mode 100755 scripts/apply_patches.sh
++ create mode 100755 scripts/bootstrap_patch_branch.sh
++ create mode 100755 scripts/refresh_patches.sh
++
++diff --git a/.github/workflows/release.yml b/.github/workflows/release.yml
++index 9cd59863f..842e12034 100644
++--- a/.github/workflows/release.yml
+++++ b/.github/workflows/release.yml
++@@ -1,151 +1,73 @@
++ name: Release
++ 
++ on:
++-  # schedule:
++-  #   # Runs at 8:00 AM UTC on every Saturday
++-  #   # We'll check below if it's the first Saturday of the month, and fail if not
++-  #   - cron: '0 8 * * 6'
++-
++-  # Allow manual triggering of the workflow
+++  push:
+++    tags:
+++      - "v*-endalk.*"
++   workflow_dispatch:
++     inputs:
++-      version_bump:
++-        description: 'Version bump type'
++-        type: choice
++-        required: true
++-        default: 'patch'
++-        options:
++-          - minor
++-          - patch
++-      ignore_blocks:
++-        description: 'Ignore blocking PRs/issues'
++-        type: boolean
+++      tag:
+++        description: "Release tag (e.g. v0.59.0-endalk.1)"
++         required: true
++-        default: false
+++        type: string
+++      ref:
+++        description: "Ref to release from (branch, commit SHA, or tag)"
+++        required: false
+++        default: "master"
+++        type: string
+++
+++concurrency:
+++  group: release-${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
+++  cancel-in-progress: false
++ 
++-defaults:
++-  run:
++-    shell: bash
+++permissions:
+++  contents: write
+++
+++env:
+++  RELEASE_TAG: ${{ github.event_name == 'workflow_dispatch' && inputs.tag || github.ref_name }}
++ 
++ jobs:
++-  check-and-release:
+++  release:
++     runs-on: ubuntu-latest
++     steps:
++-      - name: Check for correct repository
++-        if: ${{ github.event_name != 'workflow_dispatch' && github.repository != 'stefanhaller/lazygit' }}
++-        run: |
++-          echo "Should only run in the stefanhaller/lazygit repository"
++-          exit 1
++-
++-      - name: Check for first Saturday of the month
++-        if: ${{ github.event_name != 'workflow_dispatch' }}
++-        run: |
++-          if (( $(date +%e) > 7 )); then
++-            echo "This is not the first Saturday of the month"
++-            exit 1
++-          fi
++-
++-      - name: Checkout Code
+++      - name: Checkout code
++         uses: actions/checkout@v6
++         with:
++-          repository: jesseduffield/lazygit
++-          token: ${{ secrets.LAZYGIT_RELEASE_PAT }}
++           fetch-depth: 0
+++          ref: ${{ github.event_name == 'workflow_dispatch' && inputs.ref || github.ref }}
++ 
++-      - name: Get Latest Tag
++-        run: |
++-          latest_tag=$(git describe --tags $(git rev-list --tags --max-count=1) || echo "v0.0.0")
++-
++-          if ! [[ $latest_tag =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
++-            echo "Error: Tag format is invalid. Expected format: vX.X.X"
++-            exit 1
++-          fi
++-
++-          echo "Latest tag: $latest_tag"
++-          echo "latest_tag=$latest_tag" >> $GITHUB_ENV
++-
++-      - name: Check for changes since last release
+++      - name: Validate release tag format
++         run: |
++-          if [ -z "$(git diff --name-only ${{ env.latest_tag }})" ]; then
++-            echo "No changes detected since last release"
+++          if [[ ! "${RELEASE_TAG}" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-endalk\.[0-9]+$ ]]; then
+++            echo "Invalid tag '${RELEASE_TAG}'. Expected: vX.Y.Z-endalk.N"
++             exit 1
++           fi
++ 
++-      - name: Check that docs and schema are up to date
+++      - name: Ensure tag exists for workflow dispatch
+++        if: ${{ github.event_name == 'workflow_dispatch' }}
+++        env:
+++          GITHUB_TOKEN: ${{ github.token }}
++         run: |
++-          if diff -r -q docs docs-master > /dev/null && diff -r -q schema schema-master > /dev/null; then
++-            echo "Docs and schema are up to date."
++-          else
++-            echo "Docs or schema are out of date. Please run 'scripts/update_docs_for_release.sh' and make a PR."
++-            exit 1
+++          git fetch --tags
+++          if git rev-parse --verify "${RELEASE_TAG}" >/dev/null 2>&1; then
+++            echo "Tag ${RELEASE_TAG} already exists."
+++            exit 0
++           fi
++ 
++-      - name: Check for Blocking Issues/PRs
++-        if: ${{ !inputs.ignore_blocks }}
++-        id: check_blocks
++-        run: |
++-          gh auth setup-git
++-          gh auth status
++-
++-          echo "Checking for blocking issues and PRs..."
++-
++-          # Check for blocking issues
++-          blocking_issues=$(gh issue list -l blocks-release --json number,title --jq '.[] | "- \(.title) (#\(.number))"')
++-
++-          # Check for blocking PRs
++-          blocking_prs=$(gh pr list -l blocks-release --json number,title --jq '.[] | "- \(.title) (#\(.number)) (PR)"')
++-
++-          # Combine the results
++-          blocking_items="$blocking_issues"$'\n'"$blocking_prs"
++-
++-          # Remove empty lines
++-          blocking_items=$(echo "$blocking_items" | grep . || true)
++-
++-          if [ -n "$blocking_items" ]; then
++-            echo "Blocking issues/PRs detected:"
++-            echo "$blocking_items"
++-            exit 1
++-          fi
++-        env:
++-          GITHUB_TOKEN: ${{ secrets.LAZYGIT_RELEASE_PAT }}
+++          git config user.name "github-actions[bot]"
+++          git config user.email "github-actions[bot]@users.noreply.github.com"
+++          git tag "${RELEASE_TAG}" -a -m "Release ${RELEASE_TAG}"
+++          git push origin "${RELEASE_TAG}"
++ 
++-      - name: Calculate next version
+++      - name: Check docs and schema are in sync
++         run: |
++-          echo "Latest tag: ${{ env.latest_tag }}"
++-          IFS='.' read -r major minor patch <<< "${{ env.latest_tag }}"
++-
++-          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
++-            if [[ "${{ inputs.version_bump }}" == "patch" ]]; then
++-              patch=$((patch + 1))
++-            else
++-              minor=$((minor + 1))
++-              patch=0
++-            fi
+++          if diff -r -q docs docs-master >/dev/null && diff -r -q schema schema-master >/dev/null; then
+++            echo "Docs and schema are up to date."
++           else
++-            # Default behavior for scheduled runs
++-            minor=$((minor + 1))
++-            patch=0
++-          fi
++-
++-          new_tag="$major.$minor.$patch"
++-
++-          if ! [[ $new_tag =~ ^v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
++-            echo "Error: New tag's format is invalid. Expected format: vX.X.X"
+++            echo "Docs/schema mismatch detected. Run scripts/update_docs_for_release.sh and commit the results."
++             exit 1
++           fi
++ 
++-          echo "New tag: $new_tag"
++-          echo "new_tag=$new_tag" >> $GITHUB_ENV
++-
++-      - name: Create and Push Tag
++-        run: |
++-          git config user.name "github-actions[bot]"
++-          git config user.email "github-actions[bot]@users.noreply.github.com"
++-          git tag ${{ env.new_tag }} -a -m "Release ${{ env.new_tag }}"
++-          git push origin ${{ env.new_tag }}
++-        env:
++-          GITHUB_TOKEN: ${{ secrets.LAZYGIT_RELEASE_PAT }}
++-
++       - name: Setup Go
++         uses: actions/setup-go@v6
++         with:
++@@ -158,4 +80,4 @@ jobs:
++           version: v2
++           args: release --clean
++         env:
++-          GITHUB_TOKEN: ${{secrets.LAZYGIT_RELEASE_PAT}}
+++          GITHUB_TOKEN: ${{ github.token }}
++diff --git a/.github/workflows/sync-upstream.yml b/.github/workflows/sync-upstream.yml
++new file mode 100644
++index 000000000..1ecbd900b
++--- /dev/null
+++++ b/.github/workflows/sync-upstream.yml
++@@ -0,0 +1,106 @@
+++name: Sync upstream
+++
+++on:
+++  workflow_dispatch:
+++  schedule:
+++    - cron: "0 9 * * 1-5"
+++
+++concurrency:
+++  group: sync-upstream-master
+++  cancel-in-progress: false
+++
+++permissions:
+++  contents: write
+++  pull-requests: write
+++
+++jobs:
+++  sync:
+++    runs-on: ubuntu-latest
+++    env:
+++      GH_TOKEN: ${{ github.token }}
+++    steps:
+++      - name: Checkout
+++        uses: actions/checkout@v6
+++        with:
+++          fetch-depth: 0
+++
+++      - name: Configure git identity
+++        run: |
+++          git config user.name "github-actions[bot]"
+++          git config user.email "github-actions[bot]@users.noreply.github.com"
+++
+++      - name: Configure upstream remote
+++        run: |
+++          if git remote get-url upstream >/dev/null 2>&1; then
+++            git remote set-url upstream https://github.com/jesseduffield/lazygit.git
+++          else
+++            git remote add upstream https://github.com/jesseduffield/lazygit.git
+++          fi
+++
+++      - name: Fetch latest refs
+++        run: |
+++          git fetch upstream master
+++          git fetch origin master
+++
+++      - name: Create sync branch from upstream
+++        id: sync_branch
+++        run: |
+++          UPSTREAM_SHA="$(git rev-parse --short upstream/master)"
+++          TIMESTAMP="$(date +%Y%m%d%H%M%S)"
+++          BRANCH_NAME="sync/upstream-${TIMESTAMP}-${UPSTREAM_SHA}"
+++
+++          git checkout -b "$BRANCH_NAME" upstream/master
+++
+++          {
+++            echo "upstream_sha=$UPSTREAM_SHA"
+++            echo "branch_name=$BRANCH_NAME"
+++          } >> "$GITHUB_OUTPUT"
+++
+++      - name: Apply patch queue
+++        run: scripts/apply_patches.sh
+++
+++      - name: Setup Go
+++        uses: actions/setup-go@v6
+++        with:
+++          go-version: 1.25.x
+++
+++      - name: Validate patch build and tests
+++        env:
+++          GOFLAGS: -mod=vendor
+++        run: |
+++          go test ./... -short
+++          go test ./pkg/gui/controllers/helpers -run TestParseGenerateCommitMessageResponse
+++          go run cmd/integration_test/main.go cli GenerateCommitMessage GenerateCommitMessageMalformedResponse
+++
+++      - name: Check if sync changes exist
+++        id: check_changes
+++        run: |
+++          if git diff --quiet origin/master...HEAD; then
+++            echo "has_changes=false" >> "$GITHUB_OUTPUT"
+++          else
+++            echo "has_changes=true" >> "$GITHUB_OUTPUT"
+++          fi
+++
+++      - name: Push sync branch
+++        if: steps.check_changes.outputs.has_changes == 'true'
+++        run: git push -u origin "${{ steps.sync_branch.outputs.branch_name }}"
+++
+++      - name: Open pull request
+++        if: steps.check_changes.outputs.has_changes == 'true'
+++        run: |
+++          gh pr create \
+++            --base master \
+++            --head "${{ steps.sync_branch.outputs.branch_name }}" \
+++            --title "sync: upstream/master @ ${{ steps.sync_branch.outputs.upstream_sha }}" \
+++            --body "$(cat <<'EOF'
+++          ## Summary
+++          - Sync branch rebased to latest `upstream/master`
+++          - Reapplied local patch queue from `patches/series`
+++          - Ran short unit tests and AI commit-message integration tests
+++
+++          ## Validation
+++          - `go test ./... -short`
+++          - `go test ./pkg/gui/controllers/helpers -run TestParseGenerateCommitMessageResponse`
+++          - `go run cmd/integration_test/main.go cli GenerateCommitMessage GenerateCommitMessageMalformedResponse`
+++          EOF
+++          )"
++diff --git a/.github/workflows/update-homebrew-tap.yml b/.github/workflows/update-homebrew-tap.yml
++new file mode 100644
++index 000000000..fe552b764
++--- /dev/null
+++++ b/.github/workflows/update-homebrew-tap.yml
++@@ -0,0 +1,186 @@
+++name: Update Homebrew tap
+++
+++on:
+++  release:
+++    types: [published]
+++  workflow_dispatch:
+++    inputs:
+++      tag:
+++        description: "Release tag to publish in tap (e.g. v0.59.0-endalk.1)"
+++        required: false
+++        type: string
+++      version:
+++        description: "Version without leading v (optional alternative to tag)"
+++        required: false
+++        type: string
+++
+++jobs:
+++  update-tap:
+++    runs-on: ubuntu-latest
+++    env:
+++      GH_TOKEN: ${{ secrets.HOMEBREW_TAP_PAT }}
+++    steps:
+++      - name: Validate tap token
+++        run: |
+++          if [ -z "${GH_TOKEN}" ]; then
+++            echo "Missing HOMEBREW_TAP_PAT secret."
+++            exit 1
+++          fi
+++
+++      - name: Resolve release tag and version
+++        id: release
+++        run: |
+++          if [ "${{ github.event_name }}" = "release" ]; then
+++            TAG="${{ github.event.release.tag_name }}"
+++          elif [ -n "${{ inputs.tag }}" ]; then
+++            TAG="${{ inputs.tag }}"
+++          elif [ -n "${{ inputs.version }}" ]; then
+++            TAG="v${{ inputs.version }}"
+++          else
+++            echo "Provide either tag or version when running manually."
+++            exit 1
+++          fi
+++
+++          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+-endalk\.[0-9]+$ ]]; then
+++            echo "Invalid tag format: $TAG"
+++            echo "Expected format: vX.Y.Z-endalk.N"
+++            exit 1
+++          fi
+++
+++          VERSION="${TAG#v}"
+++          {
+++            echo "tag=$TAG"
+++            echo "version=$VERSION"
+++          } >> "$GITHUB_OUTPUT"
+++
+++      - name: Download release checksums
+++        run: |
+++          rm -f checksums.txt
+++          gh release download "${{ steps.release.outputs.tag }}" \
+++            --repo endalk200/lazygit \
+++            --pattern checksums.txt \
+++            --clobber \
+++            --dir .
+++
+++      - name: Extract release hashes
+++        id: hashes
+++        run: |
+++          {
+++            echo "darwin_arm64=$(grep '_darwin_arm64.tar.gz$' checksums.txt | awk '{print $1}')"
+++            echo "darwin_x64=$(grep '_darwin_x86_64.tar.gz$' checksums.txt | awk '{print $1}')"
+++            echo "linux_arm64=$(grep '_linux_arm64.tar.gz$' checksums.txt | awk '{print $1}')"
+++            echo "linux_x64=$(grep '_linux_x86_64.tar.gz$' checksums.txt | awk '{print $1}')"
+++          } >> "$GITHUB_OUTPUT"
+++
+++      - name: Validate extracted hashes
+++        env:
+++          DARWIN_ARM64: ${{ steps.hashes.outputs.darwin_arm64 }}
+++          DARWIN_X64: ${{ steps.hashes.outputs.darwin_x64 }}
+++          LINUX_ARM64: ${{ steps.hashes.outputs.linux_arm64 }}
+++          LINUX_X64: ${{ steps.hashes.outputs.linux_x64 }}
+++        run: |
+++          [ -n "$DARWIN_ARM64" ] || (echo "Missing checksum for darwin_arm64" && exit 1)
+++          [ -n "$DARWIN_X64" ] || (echo "Missing checksum for darwin_x64" && exit 1)
+++          [ -n "$LINUX_ARM64" ] || (echo "Missing checksum for linux_arm64" && exit 1)
+++          [ -n "$LINUX_X64" ] || (echo "Missing checksum for linux_x64" && exit 1)
+++
+++      - name: Checkout homebrew tap
+++        uses: actions/checkout@v6
+++        with:
+++          repository: endalk200/homebrew
+++          token: ${{ secrets.HOMEBREW_TAP_PAT }}
+++          path: tap
+++
+++      - name: Check if formula update is needed
+++        id: check
+++        run: |
+++          FORMULA_PATH="tap/Formula/lazygit-endalk.rb"
+++          TARGET_VERSION="${{ steps.release.outputs.version }}"
+++
+++          if [ -f "$FORMULA_PATH" ]; then
+++            CURRENT_VERSION="$(sed -n 's/^\s*version "\([^"]*\)".*/\1/p' "$FORMULA_PATH" | head -n1)"
+++            if [ "$CURRENT_VERSION" = "$TARGET_VERSION" ]; then
+++              echo "needs_update=false" >> "$GITHUB_OUTPUT"
+++              exit 0
+++            fi
+++          fi
+++
+++          echo "needs_update=true" >> "$GITHUB_OUTPUT"
+++
+++      - name: Generate lazygit-endalk formula
+++        if: steps.check.outputs.needs_update == 'true'
+++        env:
+++          VERSION: ${{ steps.release.outputs.version }}
+++          DARWIN_ARM64: ${{ steps.hashes.outputs.darwin_arm64 }}
+++          DARWIN_X64: ${{ steps.hashes.outputs.darwin_x64 }}
+++          LINUX_ARM64: ${{ steps.hashes.outputs.linux_arm64 }}
+++          LINUX_X64: ${{ steps.hashes.outputs.linux_x64 }}
+++        run: |
+++          cat > tap/Formula/lazygit-endalk.rb << 'FORMULA_EOF'
+++          # typed: false
+++          # frozen_string_literal: true
+++
+++          class LazygitEndalk < Formula
+++            desc "Simple terminal UI for git commands (endalk fork)"
+++            homepage "https://github.com/endalk200/lazygit"
+++            version "VERSION_PLACEHOLDER"
+++            license "MIT"
+++
+++            on_macos do
+++              on_arm do
+++                url "https://github.com/endalk200/lazygit/releases/download/v#{version}/lazygit_#{version}_darwin_arm64.tar.gz"
+++                sha256 "DARWIN_ARM64_PLACEHOLDER"
+++              end
+++              on_intel do
+++                url "https://github.com/endalk200/lazygit/releases/download/v#{version}/lazygit_#{version}_darwin_x86_64.tar.gz"
+++                sha256 "DARWIN_X64_PLACEHOLDER"
+++              end
+++            end
+++
+++            on_linux do
+++              on_arm do
+++                url "https://github.com/endalk200/lazygit/releases/download/v#{version}/lazygit_#{version}_linux_arm64.tar.gz"
+++                sha256 "LINUX_ARM64_PLACEHOLDER"
+++              end
+++              on_intel do
+++                url "https://github.com/endalk200/lazygit/releases/download/v#{version}/lazygit_#{version}_linux_x86_64.tar.gz"
+++                sha256 "LINUX_X64_PLACEHOLDER"
+++              end
+++            end
+++
+++            def install
+++              bin.install "lazygit"
+++            end
+++
+++            test do
+++              assert_match version.to_s, shell_output("#{bin}/lazygit --version")
+++            end
+++          end
+++          FORMULA_EOF
+++
+++          sed -i "s/VERSION_PLACEHOLDER/$VERSION/g" tap/Formula/lazygit-endalk.rb
+++          sed -i "s/DARWIN_ARM64_PLACEHOLDER/$DARWIN_ARM64/g" tap/Formula/lazygit-endalk.rb
+++          sed -i "s/DARWIN_X64_PLACEHOLDER/$DARWIN_X64/g" tap/Formula/lazygit-endalk.rb
+++          sed -i "s/LINUX_ARM64_PLACEHOLDER/$LINUX_ARM64/g" tap/Formula/lazygit-endalk.rb
+++          sed -i "s/LINUX_X64_PLACEHOLDER/$LINUX_X64/g" tap/Formula/lazygit-endalk.rb
+++
+++      - name: Create pull request in tap repository
+++        if: steps.check.outputs.needs_update == 'true'
+++        uses: peter-evans/create-pull-request@v7
+++        with:
+++          token: ${{ secrets.HOMEBREW_TAP_PAT }}
+++          path: tap
+++          commit-message: "Update lazygit-endalk to ${{ steps.release.outputs.version }}"
+++          title: "Update lazygit-endalk to ${{ steps.release.outputs.version }}"
+++          body: |
+++            Automated update of `lazygit-endalk` formula to `${{ steps.release.outputs.version }}`.
+++
+++            Release: [${{ steps.release.outputs.tag }}](https://github.com/endalk200/lazygit/releases/tag/${{ steps.release.outputs.tag }})
+++
+++            Checksums:
+++            - darwin-arm64: `${{ steps.hashes.outputs.darwin_arm64 }}`
+++            - darwin-x64: `${{ steps.hashes.outputs.darwin_x64 }}`
+++            - linux-arm64: `${{ steps.hashes.outputs.linux_arm64 }}`
+++            - linux-x64: `${{ steps.hashes.outputs.linux_x64 }}`
+++          branch: update-lazygit-endalk-${{ steps.release.outputs.version }}
+++          delete-branch: true
++diff --git a/docs/PatchMaintenance.md b/docs/PatchMaintenance.md
++new file mode 100644
++index 000000000..accd56fa9
++--- /dev/null
+++++ b/docs/PatchMaintenance.md
++@@ -0,0 +1,104 @@
+++# Patch Maintenance Runbook
+++
+++This runbook defines how to keep the fork aligned with upstream while preserving custom features as a patch queue.
+++
+++## One-time setup
+++
+++1. Ensure remotes are configured:
+++   - `origin`: `endalk200/lazygit`
+++   - `upstream`: `jesseduffield/lazygit`
+++2. Enable rerere so recurring conflicts are auto-resolved after the first manual fix:
+++   - `git config --global rerere.enabled true`
+++   - `git config --global rerere.autoupdate true`
+++
+++## Patch queue structure
+++
+++- Patch files live in `patches/series/`.
+++- Patch order is defined in `patches/series/series`.
+++- Scripts:
+++  - `scripts/bootstrap_patch_branch.sh`
+++  - `scripts/refresh_patches.sh`
+++  - `scripts/apply_patches.sh`
+++
+++## Bootstrap the first patch branch
+++
+++If your feature exists as uncommitted changes, run:
+++
+++```bash
+++scripts/bootstrap_patch_branch.sh
+++```
+++
+++The script:
+++
+++- creates `patches/ai-generated-commit-message`
+++- groups commits by logical area
+++- generates `git format-patch` files into `patches/series/`
+++
+++## Routine upstream sync
+++
+++1. Fetch upstream:
+++   - `git fetch upstream`
+++2. Create sync branch from upstream:
+++   - `git checkout -b sync/upstream-$(date +%Y%m%d)-$(git rev-parse --short upstream/master) upstream/master`
+++3. Apply patch queue:
+++   - `scripts/apply_patches.sh`
+++4. Validate:
+++   - `go test ./... -short`
+++   - `go run cmd/integration_test/main.go cli GenerateCommitMessage GenerateCommitMessageMalformedResponse`
+++5. Push branch and open PR to `origin/master`.
+++
+++You can also rely on `.github/workflows/sync-upstream.yml` for the automated version of this flow.
+++
+++## Refresh patches after edits
+++
+++When you change custom commits on your patch branch:
+++
+++```bash
+++scripts/refresh_patches.sh
+++```
+++
+++This rewrites patch files and updates `patches/series/series`.
+++
+++## Release checklist
+++
+++1. Confirm patch queue applies cleanly to latest upstream.
+++2. Confirm docs/schema consistency:
+++   - `diff -r -q docs docs-master`
+++   - `diff -r -q schema schema-master`
+++3. Run targeted validations:
+++   - `go test ./... -short`
+++   - `go run cmd/integration_test/main.go cli GenerateCommitMessage GenerateCommitMessageMalformedResponse`
+++4. Create release tag using fork scheme:
+++   - `vX.Y.Z-endalk.N`
+++5. Run release workflow (`.github/workflows/release.yml`) and verify:
+++   - all expected assets are present
+++   - `checksums.txt` is uploaded
+++6. Confirm tap update workflow opened a formula PR in `endalk200/homebrew`.
+++
+++## Rollback and recovery
+++
+++If release binaries are broken:
+++
+++1. Cut a new patch release tag with incremented suffix (do not reuse tag):
+++   - `vX.Y.Z-endalk.(N+1)`
+++2. Re-run release workflow for the fixed tag.
+++3. Close superseded tap PR and merge the new one.
+++
+++If patch application fails:
+++
+++1. Resolve conflicts.
+++2. Continue: `git am --continue`
+++3. Or abort: `git am --abort`
+++4. After successful resolution, regenerate patches:
+++   - `scripts/refresh_patches.sh`
+++
+++If tap update produced a bad formula PR:
+++
+++1. Close or revert the PR in `endalk200/homebrew`.
+++2. Re-run the updater workflow with the corrected release tag.
+++
+++## Health checks
+++
+++- `sync-upstream.yml` runs on a schedule to detect drift and conflicts early.
+++- `update-homebrew-tap.yml` updates formulae when new fork releases are published.
+++- If either workflow fails, inspect logs and fix before cutting the next release.
++diff --git a/patches/README.md b/patches/README.md
++new file mode 100644
++index 000000000..b89a23635
++--- /dev/null
+++++ b/patches/README.md
++@@ -0,0 +1,19 @@
+++# Patch Maintenance
+++
+++This directory stores the custom patch queue that is replayed on top of `upstream/master`.
+++
+++## Layout
+++
+++- `series/` contains `git format-patch` outputs.
+++- `series/series` pins patch application order.
+++
+++## Common tasks
+++
+++1. Bootstrap grouped commits and generate patches from your current working tree:
+++   - `scripts/bootstrap_patch_branch.sh`
+++2. Regenerate patch files after editing commits on your patch branch:
+++   - `scripts/refresh_patches.sh`
+++3. Apply the patch queue onto a fresh upstream sync branch:
+++   - `scripts/apply_patches.sh`
+++
+++If patch application fails, resolve conflicts and run `git am --continue`, or abort with `git am --abort`.
++diff --git a/patches/series/.gitkeep b/patches/series/.gitkeep
++new file mode 100644
++index 000000000..8b1378917
++--- /dev/null
+++++ b/patches/series/.gitkeep
++@@ -0,0 +1 @@
+++
++diff --git a/scripts/apply_patches.sh b/scripts/apply_patches.sh
++new file mode 100755
++index 000000000..654636361
++--- /dev/null
+++++ b/scripts/apply_patches.sh
++@@ -0,0 +1,55 @@
+++#!/usr/bin/env bash
+++
+++set -euo pipefail
+++
+++patch_dir="${1:-patches/series}"
+++series_file="$patch_dir/series"
+++
+++if [ ! -d "$patch_dir" ]; then
+++  echo "Patch directory '$patch_dir' does not exist."
+++  exit 1
+++fi
+++
+++if ! git diff --quiet || ! git diff --cached --quiet; then
+++  echo "Working tree is not clean; aborting."
+++  echo "Commit, stash, or discard your changes before applying patches."
+++  exit 1
+++fi
+++
+++patches=()
+++if [ -f "$series_file" ]; then
+++  while IFS= read -r patch_name; do
+++    if [ -z "$patch_name" ]; then
+++      continue
+++    fi
+++
+++    patch_path="$patch_dir/$patch_name"
+++    if [ ! -f "$patch_path" ]; then
+++      echo "Patch listed in series file does not exist: $patch_path"
+++      exit 1
+++    fi
+++    patches+=("$patch_path")
+++  done <"$series_file"
+++else
+++  for patch_path in "$patch_dir"/*.patch; do
+++    if [ -f "$patch_path" ]; then
+++      patches+=("$patch_path")
+++    fi
+++  done
+++fi
+++
+++if [ "${#patches[@]}" -eq 0 ]; then
+++  echo "No patches found in '$patch_dir'."
+++  exit 0
+++fi
+++
+++echo "Applying ${#patches[@]} patch(es) from '$patch_dir'..."
+++if ! git am -3 "${patches[@]}"; then
+++  echo
+++  echo "Patch application failed."
+++  echo "Resolve conflicts, then run 'git am --continue'."
+++  echo "Or run 'git am --abort' to restore your branch."
+++  exit 1
+++fi
+++
+++echo "Patch series applied successfully."
++diff --git a/scripts/bootstrap_patch_branch.sh b/scripts/bootstrap_patch_branch.sh
++new file mode 100755
++index 000000000..a740a44bf
++--- /dev/null
+++++ b/scripts/bootstrap_patch_branch.sh
++@@ -0,0 +1,95 @@
+++#!/usr/bin/env bash
+++
+++set -euo pipefail
+++
+++branch_name="${1:-patches/ai-generated-commit-message}"
+++base_ref="${2:-upstream/master}"
+++patch_dir="${3:-patches/series}"
+++
+++if git diff --quiet && git diff --cached --quiet; then
+++  echo "Working tree is clean; nothing to split into patch commits."
+++  exit 1
+++fi
+++
+++if ! git rev-parse --verify "$base_ref" >/dev/null 2>&1; then
+++  echo "Base ref '$base_ref' not found locally."
+++  echo "Try: git fetch upstream"
+++  exit 1
+++fi
+++
+++if git show-ref --verify --quiet "refs/heads/$branch_name"; then
+++  echo "Branch '$branch_name' already exists; aborting."
+++  exit 1
+++fi
+++
+++git checkout -b "$branch_name"
+++git reset
+++
+++add_existing_paths() {
+++  local paths_to_add=()
+++  for path in "$@"; do
+++    if [ -e "$path" ]; then
+++      paths_to_add+=("$path")
+++    fi
+++  done
+++
+++  if [ "${#paths_to_add[@]}" -gt 0 ]; then
+++    git add "${paths_to_add[@]}"
+++  fi
+++}
+++
+++commit_group() {
+++  local message="$1"
+++  shift
+++
+++  add_existing_paths "$@"
+++  if git diff --cached --quiet; then
+++    return
+++  fi
+++
+++  git commit -m "$message"
+++}
+++
+++commit_group "feat(config): add AI commit message configuration" \
+++  pkg/config/user_config.go \
+++  schema/config.json \
+++  schema-master/config.json
+++
+++commit_group "feat(gui): generate commit message from external command" \
+++  pkg/gui/controllers/helpers/commits_helper.go \
+++  pkg/gui/controllers/helpers/commits_helper_test.go \
+++  pkg/gui/controllers/commit_message_controller.go \
+++  pkg/gui/controllers/commit_description_controller.go \
+++  pkg/gui/context/commit_message_context.go
+++
+++commit_group "feat(i18n): add generate commit message strings" \
+++  pkg/i18n/english.go
+++
+++commit_group "docs(config): document AI commit message settings" \
+++  docs/Config.md \
+++  docs-master/Config.md \
+++  docs-master/keybindings/Keybindings_en.md \
+++  docs-master/keybindings/Keybindings_ja.md \
+++  docs-master/keybindings/Keybindings_ko.md \
+++  docs-master/keybindings/Keybindings_nl.md \
+++  docs-master/keybindings/Keybindings_pl.md \
+++  docs-master/keybindings/Keybindings_pt.md \
+++  docs-master/keybindings/Keybindings_ru.md \
+++  docs-master/keybindings/Keybindings_zh-CN.md \
+++  docs-master/keybindings/Keybindings_zh-TW.md
+++
+++commit_group "test(integration): cover AI commit message generation" \
+++  pkg/integration/tests/test_list.go \
+++  pkg/integration/tests/commit/generate_commit_message.go \
+++  pkg/integration/tests/commit/generate_commit_message_malformed_response.go
+++
+++if ! git diff --quiet || ! git diff --cached --quiet; then
+++  echo "Warning: uncommitted files remain after grouped commits."
+++  echo "They are left untouched and were not included in the patch series."
+++  git status --short
+++fi
+++
+++scripts/refresh_patches.sh "$base_ref" "$patch_dir"
+++
+++echo
+++echo "Patch branch '$branch_name' is ready and patch files were generated in '$patch_dir'."
++diff --git a/scripts/refresh_patches.sh b/scripts/refresh_patches.sh
++new file mode 100755
++index 000000000..1832ececd
++--- /dev/null
+++++ b/scripts/refresh_patches.sh
++@@ -0,0 +1,36 @@
+++#!/usr/bin/env bash
+++
+++set -euo pipefail
+++
+++base_ref="${1:-upstream/master}"
+++patch_dir="${2:-patches/series}"
+++series_file="$patch_dir/series"
+++
+++if ! git rev-parse --verify "$base_ref" >/dev/null 2>&1; then
+++  echo "Base ref '$base_ref' does not exist locally."
+++  echo "Try: git fetch upstream"
+++  exit 1
+++fi
+++
+++mkdir -p "$patch_dir"
+++
+++# Remove previously generated patch files to keep the directory deterministic.
+++rm -f "$patch_dir"/*.patch
+++
+++git format-patch "$base_ref"..HEAD --output-directory "$patch_dir"
+++
+++: >"$series_file"
+++for patch in "$patch_dir"/*.patch; do
+++  if [ ! -e "$patch" ]; then
+++    continue
+++  fi
+++  basename "$patch" >>"$series_file"
+++done
+++
+++if [ ! -s "$series_file" ]; then
+++  echo "No commits found in range '$base_ref..HEAD'; no patch series generated."
+++  exit 0
+++fi
+++
+++echo "Wrote patch series to '$patch_dir'."
+++echo "Patch count: $(wc -l <"$series_file" | tr -d ' ')"
++diff --git a/scripts/update_docs_for_release.sh b/scripts/update_docs_for_release.sh
++index f37e36091..61b7b03fc 100755
++--- a/scripts/update_docs_for_release.sh
+++++ b/scripts/update_docs_for_release.sh
++@@ -2,6 +2,10 @@
++ 
++ set -euo pipefail
++ 
+++default_base_ref=$(git symbolic-ref --quiet --short refs/remotes/origin/HEAD 2>/dev/null || echo "origin/master")
+++base_ref="${1:-$default_base_ref}"
+++branch_name="${2:-update-docs-for-release}"
+++
++ st=$(git status --porcelain)
++ if [ -n "$st" ]; then
++     echo "Working directory is not clean; aborting."
++@@ -13,14 +17,17 @@ if diff -r -q docs docs-master > /dev/null && diff -r -q schema schema-master >
++     exit 0
++ fi
++ 
++-branch_name=update-docs-for-release
++-
++ if git show-ref --verify --quiet refs/heads/"$branch_name"; then
++     echo "Branch '$branch_name' already exists; aborting."
++     exit 1
++ fi
++ 
++-git checkout -b "$branch_name" --no-track origin/master
+++if ! git rev-parse --verify "$base_ref" >/dev/null 2>&1; then
+++    echo "Base ref '$base_ref' does not exist; aborting."
+++    exit 1
+++fi
+++
+++git checkout -b "$branch_name" --no-track "$base_ref"
++ 
++ git rm -r docs schema
++ cp -r docs-master docs
++-- 
++2.51.2
++
+diff --git a/patches/series/0007-chore-patches-add-AI-commit-message-patch-series.patch b/patches/series/0007-chore-patches-add-AI-commit-message-patch-series.patch
+new file mode 100644
+index 000000000..029d98b89
+--- /dev/null
++++ b/patches/series/0007-chore-patches-add-AI-commit-message-patch-series.patch
+@@ -0,0 +1,1060 @@
++From 3c9a6eb94f592ab86936a04464605a3d2c2a3468 Mon Sep 17 00:00:00 2001
++From: endalk200 <eb808826@gmail.com>
++Date: Tue, 17 Feb 2026 13:11:29 +0300
++Subject: [PATCH 07/10] chore(patches): add AI commit-message patch series
++
++---
++ ...-add-AI-commit-message-configuration.patch | 151 +++++++
++ ...e-commit-message-from-external-comma.patch | 373 ++++++++++++++++++
++ ...-add-generate-commit-message-strings.patch |  70 ++++
++ ...-document-AI-commit-message-settings.patch | 282 +++++++++++++
++ ...n-cover-AI-commit-message-generation.patch | 120 ++++++
++ patches/series/series                         |   5 +
++ 6 files changed, 1001 insertions(+)
++ create mode 100644 patches/series/0001-feat-config-add-AI-commit-message-configuration.patch
++ create mode 100644 patches/series/0002-feat-gui-generate-commit-message-from-external-comma.patch
++ create mode 100644 patches/series/0003-feat-i18n-add-generate-commit-message-strings.patch
++ create mode 100644 patches/series/0004-docs-config-document-AI-commit-message-settings.patch
++ create mode 100644 patches/series/0005-test-integration-cover-AI-commit-message-generation.patch
++ create mode 100644 patches/series/series
++
++diff --git a/patches/series/0001-feat-config-add-AI-commit-message-configuration.patch b/patches/series/0001-feat-config-add-AI-commit-message-configuration.patch
++new file mode 100644
++index 000000000..fdc75baed
++--- /dev/null
+++++ b/patches/series/0001-feat-config-add-AI-commit-message-configuration.patch
++@@ -0,0 +1,151 @@
+++From b9d93cc9e4d340b7c4469726d4f63ca9d535d0f2 Mon Sep 17 00:00:00 2001
+++From: endalk200 <eb808826@gmail.com>
+++Date: Tue, 17 Feb 2026 13:09:19 +0300
+++Subject: [PATCH 1/5] feat(config): add AI commit message configuration
+++
+++---
+++ pkg/config/user_config.go | 17 +++++++++++++++--
+++ schema-master/config.json | 19 +++++++++++++++++++
+++ schema/config.json        | 19 +++++++++++++++++++
+++ 3 files changed, 53 insertions(+), 2 deletions(-)
+++
+++diff --git a/pkg/config/user_config.go b/pkg/config/user_config.go
+++index abf591801..9c466907e 100644
+++--- a/pkg/config/user_config.go
++++++ b/pkg/config/user_config.go
+++@@ -355,6 +355,14 @@ type CommitConfig struct {
+++ 	AutoWrapCommitMessage bool `yaml:"autoWrapCommitMessage"`
+++ 	// If autoWrapCommitMessage is true, the width to wrap to
+++ 	AutoWrapWidth int `yaml:"autoWrapWidth"`
++++	// Configuration for generating commit messages via an external command.
++++	AICommitMessage AICommitMessageConfig `yaml:"aiCommitMessage"`
++++}
++++
++++type AICommitMessageConfig struct {
++++	// Command to run for generating a commit title and description.
++++	// The command is executed from the repository root.
++++	Command string `yaml:"command"`
+++ }
+++ 
+++ type MergingConfig struct {
+++@@ -602,7 +610,8 @@ type KeybindingSubmodulesConfig struct {
+++ }
+++ 
+++ type KeybindingCommitMessageConfig struct {
+++-	CommitMenu string `yaml:"commitMenu"`
++++	CommitMenu            string `yaml:"commitMenu"`
++++	GenerateCommitMessage string `yaml:"generateCommitMessage"`
+++ }
+++ 
+++ // OSConfig contains config on the level of the os
+++@@ -827,6 +836,9 @@ func GetDefaultConfig() *UserConfig {
+++ 				SignOff:               false,
+++ 				AutoWrapCommitMessage: true,
+++ 				AutoWrapWidth:         72,
++++				AICommitMessage: AICommitMessageConfig{
++++					Command: "",
++++				},
+++ 			},
+++ 			Merging: MergingConfig{
+++ 				ManualCommit:       false,
+++@@ -1054,7 +1066,8 @@ func GetDefaultConfig() *UserConfig {
+++ 				BulkMenu: "b",
+++ 			},
+++ 			CommitMessage: KeybindingCommitMessageConfig{
+++-				CommitMenu: "<c-o>",
++++				CommitMenu:            "<c-o>",
++++				GenerateCommitMessage: "<c-g>",
+++ 			},
+++ 		},
+++ 	}
+++diff --git a/schema-master/config.json b/schema-master/config.json
+++index 0e880b066..7351148c4 100644
+++--- a/schema-master/config.json
++++++ b/schema-master/config.json
+++@@ -3,6 +3,17 @@
+++   "$id": "https://github.com/jesseduffield/lazygit/pkg/config/user-config",
+++   "$ref": "#/$defs/UserConfig",
+++   "$defs": {
++++    "AICommitMessageConfig": {
++++      "properties": {
++++        "command": {
++++          "type": "string",
++++          "description": "Command to run for generating a commit title and description.\nThe command is executed from the repository root."
++++        }
++++      },
++++      "additionalProperties": false,
++++      "type": "object",
++++      "description": "Configuration for generating commit messages via an external command."
++++    },
+++     "CommitConfig": {
+++       "properties": {
+++         "signOff": {
+++@@ -19,6 +30,10 @@
+++           "type": "integer",
+++           "description": "If autoWrapCommitMessage is true, the width to wrap to",
+++           "default": 72
++++        },
++++        "aiCommitMessage": {
++++          "$ref": "#/$defs/AICommitMessageConfig",
++++          "description": "Configuration for generating commit messages via an external command."
+++         }
+++       },
+++       "additionalProperties": false,
+++@@ -919,6 +934,10 @@
+++         "commitMenu": {
+++           "type": "string",
+++           "default": "\u003cc-o\u003e"
++++        },
++++        "generateCommitMessage": {
++++          "type": "string",
++++          "default": "\u003cc-g\u003e"
+++         }
+++       },
+++       "additionalProperties": false,
+++diff --git a/schema/config.json b/schema/config.json
+++index 0e880b066..7351148c4 100644
+++--- a/schema/config.json
++++++ b/schema/config.json
+++@@ -3,6 +3,17 @@
+++   "$id": "https://github.com/jesseduffield/lazygit/pkg/config/user-config",
+++   "$ref": "#/$defs/UserConfig",
+++   "$defs": {
++++    "AICommitMessageConfig": {
++++      "properties": {
++++        "command": {
++++          "type": "string",
++++          "description": "Command to run for generating a commit title and description.\nThe command is executed from the repository root."
++++        }
++++      },
++++      "additionalProperties": false,
++++      "type": "object",
++++      "description": "Configuration for generating commit messages via an external command."
++++    },
+++     "CommitConfig": {
+++       "properties": {
+++         "signOff": {
+++@@ -19,6 +30,10 @@
+++           "type": "integer",
+++           "description": "If autoWrapCommitMessage is true, the width to wrap to",
+++           "default": 72
++++        },
++++        "aiCommitMessage": {
++++          "$ref": "#/$defs/AICommitMessageConfig",
++++          "description": "Configuration for generating commit messages via an external command."
+++         }
+++       },
+++       "additionalProperties": false,
+++@@ -919,6 +934,10 @@
+++         "commitMenu": {
+++           "type": "string",
+++           "default": "\u003cc-o\u003e"
++++        },
++++        "generateCommitMessage": {
++++          "type": "string",
++++          "default": "\u003cc-g\u003e"
+++         }
+++       },
+++       "additionalProperties": false,
+++-- 
+++2.51.2
+++
++diff --git a/patches/series/0002-feat-gui-generate-commit-message-from-external-comma.patch b/patches/series/0002-feat-gui-generate-commit-message-from-external-comma.patch
++new file mode 100644
++index 000000000..c33c0a4eb
++--- /dev/null
+++++ b/patches/series/0002-feat-gui-generate-commit-message-from-external-comma.patch
++@@ -0,0 +1,373 @@
+++From d5740b764ff2b26c47a9dfc1b2d00ffd2a2f23cb Mon Sep 17 00:00:00 2001
+++From: endalk200 <eb808826@gmail.com>
+++Date: Tue, 17 Feb 2026 13:09:19 +0300
+++Subject: [PATCH 2/5] feat(gui): generate commit message from external command
+++
+++---
+++ pkg/gui/context/commit_message_context.go     |   8 +-
+++ .../commit_description_controller.go          |  10 ++
+++ .../controllers/commit_message_controller.go  |  10 ++
+++ pkg/gui/controllers/helpers/commits_helper.go | 165 ++++++++++++++++++
+++ .../helpers/commits_helper_test.go            |  58 ++++++
+++ 5 files changed, 250 insertions(+), 1 deletion(-)
+++
+++diff --git a/pkg/gui/context/commit_message_context.go b/pkg/gui/context/commit_message_context.go
+++index d533e1dea..a9cb46da1 100644
+++--- a/pkg/gui/context/commit_message_context.go
++++++ b/pkg/gui/context/commit_message_context.go
+++@@ -1,6 +1,7 @@
+++ package context
+++ 
+++ import (
++++	"fmt"
+++ 	"os"
+++ 	"path/filepath"
+++ 	"strconv"
+++@@ -165,11 +166,16 @@ func (self *CommitMessageContext) SetPanelState(
+++ 	self.GetView().Title = summaryTitle
+++ 	self.c.Views().CommitDescription.Title = descriptionTitle
+++ 
+++-	self.c.Views().CommitDescription.Subtitle = utils.ResolvePlaceholderString(self.c.Tr.CommitDescriptionSubTitle,
++++	subtitle := utils.ResolvePlaceholderString(self.c.Tr.CommitDescriptionSubTitle,
+++ 		map[string]string{
+++ 			"togglePanelKeyBinding": keybindings.Label(self.c.UserConfig().Keybinding.Universal.TogglePanel),
+++ 			"commitMenuKeybinding":  keybindings.Label(self.c.UserConfig().Keybinding.CommitMessage.CommitMenu),
+++ 		})
++++	generateCommitMessageKey := keybindings.Label(self.c.UserConfig().Keybinding.CommitMessage.GenerateCommitMessage)
++++	if generateCommitMessageKey != "<disabled>" {
++++		subtitle += fmt.Sprintf(", %s %s", generateCommitMessageKey, self.c.Tr.GenerateCommitMessage)
++++	}
++++	self.c.Views().CommitDescription.Subtitle = subtitle
+++ 
+++ 	self.c.Views().CommitDescription.Visible = true
+++ }
+++diff --git a/pkg/gui/controllers/commit_description_controller.go b/pkg/gui/controllers/commit_description_controller.go
+++index 24653c767..3934dbcf4 100644
+++--- a/pkg/gui/controllers/commit_description_controller.go
++++++ b/pkg/gui/controllers/commit_description_controller.go
+++@@ -45,6 +45,12 @@ func (self *CommitDescriptionController) GetKeybindings(opts types.KeybindingsOp
+++ 			Key:     opts.GetKey(opts.Config.CommitMessage.CommitMenu),
+++ 			Handler: self.openCommitMenu,
+++ 		},
++++		{
++++			Key:               opts.GetKey(opts.Config.CommitMessage.GenerateCommitMessage),
++++			Handler:           self.generateCommitMessage,
++++			Description:       self.c.Tr.GenerateCommitMessage,
++++			GetDisabledReason: self.c.Helpers().Commits.GetGenerateCommitMessageDisabledReason,
++++		},
+++ 	}
+++ 
+++ 	return bindings
+++@@ -136,6 +142,10 @@ func (self *CommitDescriptionController) openCommitMenu() error {
+++ 	return self.c.Helpers().Commits.OpenCommitMenu(authorSuggestion)
+++ }
+++ 
++++func (self *CommitDescriptionController) generateCommitMessage() error {
++++	return self.c.Helpers().Commits.GenerateCommitMessageWithAI()
++++}
++++
+++ func (self *CommitDescriptionController) onClick(opts gocui.ViewMouseBindingOpts) error {
+++ 	self.c.Context().Replace(self.c.Contexts().CommitDescription)
+++ 	return nil
+++diff --git a/pkg/gui/controllers/commit_message_controller.go b/pkg/gui/controllers/commit_message_controller.go
+++index e9ff1bc67..5a9a54f95 100644
+++--- a/pkg/gui/controllers/commit_message_controller.go
++++++ b/pkg/gui/controllers/commit_message_controller.go
+++@@ -54,6 +54,12 @@ func (self *CommitMessageController) GetKeybindings(opts types.KeybindingsOpts)
+++ 			Key:     opts.GetKey(opts.Config.CommitMessage.CommitMenu),
+++ 			Handler: self.openCommitMenu,
+++ 		},
++++		{
++++			Key:               opts.GetKey(opts.Config.CommitMessage.GenerateCommitMessage),
++++			Handler:           self.generateCommitMessage,
++++			Description:       self.c.Tr.GenerateCommitMessage,
++++			GetDisabledReason: self.c.Helpers().Commits.GetGenerateCommitMessageDisabledReason,
++++		},
+++ 	}
+++ 
+++ 	return bindings
+++@@ -194,6 +200,10 @@ func (self *CommitMessageController) openCommitMenu() error {
+++ 	return self.c.Helpers().Commits.OpenCommitMenu(authorSuggestion)
+++ }
+++ 
++++func (self *CommitMessageController) generateCommitMessage() error {
++++	return self.c.Helpers().Commits.GenerateCommitMessageWithAI()
++++}
++++
+++ func (self *CommitMessageController) onClick(opts gocui.ViewMouseBindingOpts) error {
+++ 	self.c.Context().Replace(self.c.Contexts().CommitMessage)
+++ 	return nil
+++diff --git a/pkg/gui/controllers/helpers/commits_helper.go b/pkg/gui/controllers/helpers/commits_helper.go
+++index 471706064..0b6fdd735 100644
+++--- a/pkg/gui/controllers/helpers/commits_helper.go
++++++ b/pkg/gui/controllers/helpers/commits_helper.go
+++@@ -1,7 +1,10 @@
+++ package helpers
+++ 
+++ import (
++++	"encoding/json"
+++ 	"errors"
++++	"fmt"
++++	"io"
+++ 	"path/filepath"
+++ 	"strings"
+++ 	"time"
+++@@ -22,6 +25,30 @@ type CommitsHelper struct {
+++ 	setCommitDescription          func(string)
+++ }
+++ 
++++type generateCommitMessageRequest struct {
++++	Version     string                            `json:"version"`
++++	Cwd         string                            `json:"cwd"`
++++	Draft       *generateCommitMessageDraft       `json:"draft,omitempty"`
++++	Constraints *generateCommitMessageConstraints `json:"constraints,omitempty"`
++++}
++++
++++type generateCommitMessageDraft struct {
++++	Title       string `json:"title,omitempty"`
++++	Description string `json:"description,omitempty"`
++++}
++++
++++type generateCommitMessageConstraints struct {
++++	TitleMaxLength int `json:"titleMaxLength,omitempty"`
++++}
++++
++++type generateCommitMessageResponse struct {
++++	Version     string         `json:"version"`
++++	Title       string         `json:"title"`
++++	Description string         `json:"description"`
++++	Warnings    []string       `json:"warnings,omitempty"`
++++	Meta        map[string]any `json:"meta,omitempty"`
++++}
++++
+++ func NewCommitsHelper(
+++ 	c *HelperCommon,
+++ 	getCommitSummary func() string,
+++@@ -48,6 +75,10 @@ func (self *CommitsHelper) SplitCommitMessageAndDescription(message string) (str
+++ func (self *CommitsHelper) SetMessageAndDescriptionInView(message string) {
+++ 	summary, description := self.SplitCommitMessageAndDescription(message)
+++ 
++++	self.SetSummaryAndDescriptionInView(summary, description)
++++}
++++
++++func (self *CommitsHelper) SetSummaryAndDescriptionInView(summary string, description string) {
+++ 	self.setCommitSummary(summary)
+++ 	self.setCommitDescription(description)
+++ 	self.c.Contexts().CommitMessage.RenderSubtitle()
+++@@ -208,6 +239,14 @@ func (self *CommitsHelper) OpenCommitMenu(suggestionFunc func(string) []*types.S
+++ 			Key:            'e',
+++ 			DisabledReason: disabledReasonForOpenInEditor,
+++ 		},
++++		{
++++			Label: self.c.Tr.GenerateCommitMessage,
++++			OnPress: func() error {
++++				return self.GenerateCommitMessageWithAI()
++++			},
++++			Key:            'g',
++++			DisabledReason: self.GetGenerateCommitMessageDisabledReason(),
++++		},
+++ 		{
+++ 			Label: self.c.Tr.AddCoAuthor,
+++ 			OnPress: func() error {
+++@@ -229,6 +268,132 @@ func (self *CommitsHelper) OpenCommitMenu(suggestionFunc func(string) []*types.S
+++ 	})
+++ }
+++ 
++++func (self *CommitsHelper) GetGenerateCommitMessageDisabledReason() *types.DisabledReason {
++++	if strings.TrimSpace(self.c.UserConfig().Git.Commit.AICommitMessage.Command) != "" {
++++		return nil
++++	}
++++
++++	return &types.DisabledReason{
++++		Text: self.c.Tr.GenerateCommitMessageDisabled,
++++	}
++++}
++++
++++func (self *CommitsHelper) GenerateCommitMessageWithAI() error {
++++	if disabledReason := self.GetGenerateCommitMessageDisabledReason(); disabledReason != nil {
++++		return errors.New(disabledReason.Text)
++++	}
++++
++++	currentMessage := self.JoinCommitMessageAndUnwrappedDescription()
++++	return self.c.ConfirmIf(currentMessage != "", types.ConfirmOpts{
++++		Title:  self.c.Tr.GenerateCommitMessage,
++++		Prompt: self.c.Tr.SureReplaceCommitMessageWithGenerated,
++++		HandleConfirm: func() error {
++++			return self.generateCommitMessageWithAI()
++++		},
++++	})
++++}
++++
++++func (self *CommitsHelper) generateCommitMessageWithAI() error {
++++	requestStr, err := self.getGenerateCommitMessageRequest()
++++	if err != nil {
++++		return err
++++	}
++++
++++	command := strings.TrimSpace(self.c.UserConfig().Git.Commit.AICommitMessage.Command)
++++	cmdObj := self.c.OS().Cmd.
++++		NewShell(command, self.c.UserConfig().OS.ShellFunctionsFile).
++++		SetWd(self.c.Git().RepoPaths.WorktreePath()).
++++		SetStdin(requestStr)
++++
++++	self.c.LogAction(self.c.Tr.Actions.GenerateCommitMessage)
++++	return self.c.WithWaitingStatus(self.c.Tr.GeneratingCommitMessage, func(gocui.Task) error {
++++		output, err := cmdObj.RunWithOutput()
++++		if err != nil {
++++			return err
++++		}
++++
++++		response, err := parseGenerateCommitMessageResponse(output)
++++		if err != nil {
++++			return err
++++		}
++++
++++		self.c.OnUIThread(func() error {
++++			self.SetSummaryAndDescriptionInView(response.Title, response.Description)
++++			if len(response.Warnings) > 0 {
++++				self.c.Toast(strings.Join(response.Warnings, "; "))
++++			}
++++			return nil
++++		})
++++
++++		return nil
++++	})
++++}
++++
++++func (self *CommitsHelper) getGenerateCommitMessageRequest() (string, error) {
++++	draft := &generateCommitMessageDraft{
++++		Title:       self.getCommitSummary(),
++++		Description: self.getUnwrappedCommitDescription(),
++++	}
++++
++++	request := &generateCommitMessageRequest{
++++		Version: "1",
++++		Cwd:     self.c.Git().RepoPaths.WorktreePath(),
++++		Constraints: &generateCommitMessageConstraints{
++++			TitleMaxLength: 72,
++++		},
++++	}
++++	if draft.Title != "" || draft.Description != "" {
++++		request.Draft = draft
++++	}
++++
++++	payload, err := json.Marshal(request)
++++	if err != nil {
++++		return "", err
++++	}
++++
++++	return string(payload), nil
++++}
++++
++++func parseGenerateCommitMessageResponse(output string) (*generateCommitMessageResponse, error) {
++++	trimmedOutput := strings.TrimSpace(output)
++++	if trimmedOutput == "" {
++++		return nil, errors.New("AI commit command returned empty output")
++++	}
++++
++++	decoder := json.NewDecoder(strings.NewReader(trimmedOutput))
++++	decoder.DisallowUnknownFields()
++++
++++	var response generateCommitMessageResponse
++++	if err := decoder.Decode(&response); err != nil {
++++		return nil, fmt.Errorf("invalid AI commit response: %w", err)
++++	}
++++	if err := ensureEOF(decoder); err != nil {
++++		return nil, fmt.Errorf("invalid AI commit response: %w", err)
++++	}
++++
++++	response.Title = strings.TrimSpace(response.Title)
++++	response.Description = strings.TrimSpace(response.Description)
++++	if response.Title == "" {
++++		return nil, errors.New("invalid AI commit response: missing title")
++++	}
++++	if strings.Contains(response.Title, "\n") {
++++		return nil, errors.New("invalid AI commit response: title must be a single line")
++++	}
++++
++++	return &response, nil
++++}
++++
++++func ensureEOF(decoder *json.Decoder) error {
++++	var extra any
++++	if err := decoder.Decode(&extra); err != io.EOF {
++++		if err == nil {
++++			return errors.New("unexpected extra JSON content")
++++		}
++++		return err
++++	}
++++	return nil
++++}
++++
+++ func (self *CommitsHelper) addCoAuthor(suggestionFunc func(string) []*types.Suggestion) error {
+++ 	self.c.Prompt(types.PromptOpts{
+++ 		Title:               self.c.Tr.AddCoAuthorPromptTitle,
+++diff --git a/pkg/gui/controllers/helpers/commits_helper_test.go b/pkg/gui/controllers/helpers/commits_helper_test.go
+++index 6197c3916..d8e2f2c64 100644
+++--- a/pkg/gui/controllers/helpers/commits_helper_test.go
++++++ b/pkg/gui/controllers/helpers/commits_helper_test.go
+++@@ -39,3 +39,61 @@ func TestTryRemoveHardLineBreaks(t *testing.T) {
+++ 		})
+++ 	}
+++ }
++++
++++func TestParseGenerateCommitMessageResponse(t *testing.T) {
++++	scenarios := []struct {
++++		name          string
++++		output        string
++++		expectedTitle string
++++		expectedBody  string
++++		expectedErr   string
++++	}{
++++		{
++++			name:          "valid response",
++++			output:        `{"version":"1","title":"feat: add parser","description":"adds parser for AI response","warnings":["w1"]}`,
++++			expectedTitle: "feat: add parser",
++++			expectedBody:  "adds parser for AI response",
++++		},
++++		{
++++			name:        "empty output",
++++			output:      "",
++++			expectedErr: "empty output",
++++		},
++++		{
++++			name:        "invalid json",
++++			output:      "not json",
++++			expectedErr: "invalid AI commit response",
++++		},
++++		{
++++			name:        "missing title",
++++			output:      `{"version":"1","description":"body only"}`,
++++			expectedErr: "missing title",
++++		},
++++		{
++++			name:        "multiline title",
++++			output:      "{\n\"version\":\"1\",\n\"title\":\"line 1\\nline 2\",\n\"description\":\"body\"\n}",
++++			expectedErr: "single line",
++++		},
++++		{
++++			name:        "unknown field",
++++			output:      `{"version":"1","title":"feat","description":"body","unknown":"value"}`,
++++			expectedErr: "invalid AI commit response",
++++		},
++++	}
++++
++++	for _, s := range scenarios {
++++		t.Run(s.name, func(t *testing.T) {
++++			result, err := parseGenerateCommitMessageResponse(s.output)
++++			if s.expectedErr != "" {
++++				assert.Error(t, err)
++++				assert.ErrorContains(t, err, s.expectedErr)
++++				assert.Nil(t, result)
++++				return
++++			}
++++
++++			assert.NoError(t, err)
++++			assert.Equal(t, s.expectedTitle, result.Title)
++++			assert.Equal(t, s.expectedBody, result.Description)
++++		})
++++	}
++++}
+++-- 
+++2.51.2
+++
++diff --git a/patches/series/0003-feat-i18n-add-generate-commit-message-strings.patch b/patches/series/0003-feat-i18n-add-generate-commit-message-strings.patch
++new file mode 100644
++index 000000000..671c955c8
++--- /dev/null
+++++ b/patches/series/0003-feat-i18n-add-generate-commit-message-strings.patch
++@@ -0,0 +1,70 @@
+++From 598b2a3761269125f9717d741c6417de4df50dbd Mon Sep 17 00:00:00 2001
+++From: endalk200 <eb808826@gmail.com>
+++Date: Tue, 17 Feb 2026 13:09:19 +0300
+++Subject: [PATCH 3/5] feat(i18n): add generate commit message strings
+++
+++---
+++ pkg/i18n/english.go | 10 ++++++++++
+++ 1 file changed, 10 insertions(+)
+++
+++diff --git a/pkg/i18n/english.go b/pkg/i18n/english.go
+++index ce87693a2..b26381114 100644
+++--- a/pkg/i18n/english.go
++++++ b/pkg/i18n/english.go
+++@@ -421,6 +421,7 @@ type TranslationSet struct {
+++ 	RedoingStatus                         string
+++ 	CheckingOutStatus                     string
+++ 	CommittingStatus                      string
++++	GeneratingCommitMessage               string
+++ 	RewordingStatus                       string
+++ 	RevertingStatus                       string
+++ 	CreatingFixupCommitStatus             string
+++@@ -666,7 +667,10 @@ type TranslationSet struct {
+++ 	CommitHash                            string
+++ 	CommitURL                             string
+++ 	PasteCommitMessageFromClipboard       string
++++	GenerateCommitMessage                 string
+++ 	SurePasteCommitMessage                string
++++	SureReplaceCommitMessageWithGenerated string
++++	GenerateCommitMessageDisabled         string
+++ 	CommitMessage                         string
+++ 	CommitMessageBody                     string
+++ 	CommitSubject                         string
+++@@ -980,6 +984,7 @@ type Actions struct {
+++ 	ResetCommitAuthor                string
+++ 	SetCommitAuthor                  string
+++ 	AddCommitCoAuthor                string
++++	GenerateCommitMessage            string
+++ 	RevertCommit                     string
+++ 	CreateFixupCommit                string
+++ 	SquashAllAboveFixupCommits       string
+++@@ -1529,6 +1534,7 @@ func EnglishTranslationSet() *TranslationSet {
+++ 		RedoingStatus:                        "Redoing",
+++ 		CheckingOutStatus:                    "Checking out",
+++ 		CommittingStatus:                     "Committing",
++++		GeneratingCommitMessage:              "Generating commit message",
+++ 		RewordingStatus:                      "Rewording",
+++ 		RevertingStatus:                      "Reverting",
+++ 		CreatingFixupCommitStatus:            "Creating fixup commit",
+++@@ -1774,7 +1780,10 @@ func EnglishTranslationSet() *TranslationSet {
+++ 		CommitHash:                               "Commit hash",
+++ 		CommitURL:                                "Commit URL",
+++ 		PasteCommitMessageFromClipboard:          "Paste commit message from clipboard",
++++		GenerateCommitMessage:                    "Generate commit message",
+++ 		SurePasteCommitMessage:                   "Pasting will overwrite the current commit message, continue?",
++++		SureReplaceCommitMessageWithGenerated:    "Replacing will overwrite the current commit message, continue?",
++++		GenerateCommitMessageDisabled:            "Set git.commit.aiCommitMessage.command in your config to enable this action.",
+++ 		CommitMessage:                            "Commit message (subject and body)",
+++ 		CommitMessageBody:                        "Commit message body",
+++ 		CommitSubject:                            "Commit subject",
+++@@ -2046,6 +2055,7 @@ func EnglishTranslationSet() *TranslationSet {
+++ 			ResetCommitAuthor:                "Reset commit author",
+++ 			SetCommitAuthor:                  "Set commit author",
+++ 			AddCommitCoAuthor:                "Add commit co-author",
++++			GenerateCommitMessage:            "Generate commit message",
+++ 			RevertCommit:                     "Revert commit",
+++ 			CreateFixupCommit:                "Create fixup commit",
+++ 			SquashAllAboveFixupCommits:       "Squash all above fixup commits",
+++-- 
+++2.51.2
+++
++diff --git a/patches/series/0004-docs-config-document-AI-commit-message-settings.patch b/patches/series/0004-docs-config-document-AI-commit-message-settings.patch
++new file mode 100644
++index 000000000..952497ab6
++--- /dev/null
+++++ b/patches/series/0004-docs-config-document-AI-commit-message-settings.patch
++@@ -0,0 +1,282 @@
+++From 227bb0c77bac8a90c18c7791e96ae0d33bd33a9e Mon Sep 17 00:00:00 2001
+++From: endalk200 <eb808826@gmail.com>
+++Date: Tue, 17 Feb 2026 13:09:19 +0300
+++Subject: [PATCH 4/5] docs(config): document AI commit message settings
+++
+++---
+++ docs-master/Config.md                        | 7 +++++++
+++ docs-master/keybindings/Keybindings_en.md    | 7 +++++++
+++ docs-master/keybindings/Keybindings_ja.md    | 7 +++++++
+++ docs-master/keybindings/Keybindings_ko.md    | 7 +++++++
+++ docs-master/keybindings/Keybindings_nl.md    | 7 +++++++
+++ docs-master/keybindings/Keybindings_pl.md    | 7 +++++++
+++ docs-master/keybindings/Keybindings_pt.md    | 7 +++++++
+++ docs-master/keybindings/Keybindings_ru.md    | 7 +++++++
+++ docs-master/keybindings/Keybindings_zh-CN.md | 7 +++++++
+++ docs-master/keybindings/Keybindings_zh-TW.md | 7 +++++++
+++ docs/Config.md                               | 7 +++++++
+++ 11 files changed, 77 insertions(+)
+++
+++diff --git a/docs-master/Config.md b/docs-master/Config.md
+++index 38887b3e2..151deda54 100644
+++--- a/docs-master/Config.md
++++++ b/docs-master/Config.md
+++@@ -359,6 +359,12 @@ git:
+++     # If autoWrapCommitMessage is true, the width to wrap to
+++     autoWrapWidth: 72
+++ 
++++    # Configuration for generating commit messages via an external command.
++++    aiCommitMessage:
++++      # Command to run for generating a commit title and description.
++++      # The command is executed from the repository root.
++++      command: ""
++++
+++   # Config relating to merging
+++   merging:
+++     # If true, run merges in a subprocess so that if a commit message is required,
+++@@ -753,6 +759,7 @@ keybinding:
+++     bulkMenu: b
+++   commitMessage:
+++     commitMenu: <c-o>
++++    generateCommitMessage: <c-g>
+++ ```
+++ <!-- END CONFIG YAML -->
+++ 
+++diff --git a/docs-master/keybindings/Keybindings_en.md b/docs-master/keybindings/Keybindings_en.md
+++index 76b02512c..fd68bfe2e 100644
+++--- a/docs-master/keybindings/Keybindings_en.md
++++++ b/docs-master/keybindings/Keybindings_en.md
+++@@ -53,6 +53,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+++ | `` ] `` | Next tab |  |
+++ | `` [ `` | Previous tab |  |
+++ 
++++## Commit description
++++
++++| Key | Action | Info |
++++|-----|--------|-------------|
++++| `` <c-g> `` | Generate commit message |  |
++++
+++ ## Commit files
+++ 
+++ | Key | Action | Info |
+++@@ -79,6 +85,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+++ |-----|--------|-------------|
+++ | `` <enter> `` | Confirm |  |
+++ | `` <esc> `` | Close |  |
++++| `` <c-g> `` | Generate commit message |  |
+++ 
+++ ## Commits
+++ 
+++diff --git a/docs-master/keybindings/Keybindings_ja.md b/docs-master/keybindings/Keybindings_ja.md
+++index b657aa794..27b25b7bc 100644
+++--- a/docs-master/keybindings/Keybindings_ja.md
++++++ b/docs-master/keybindings/Keybindings_ja.md
+++@@ -127,6 +127,13 @@ _凡例：`＜c-b＞` はctrl+b、`＜a-b＞` はalt+b、`B` はshift+bを意味
+++ |-----|--------|-------------|
+++ | `` <enter> `` | 確認 |  |
+++ | `` <esc> `` | 閉じる |  |
++++| `` <c-g> `` | Generate commit message |  |
++++
++++## コミット詳細
++++
++++| Key | Action | Info |
++++|-----|--------|-------------|
++++| `` <c-g> `` | Generate commit message |  |
+++ 
+++ ## サブコミット
+++ 
+++diff --git a/docs-master/keybindings/Keybindings_ko.md b/docs-master/keybindings/Keybindings_ko.md
+++index 0860c8571..3ce0f117c 100644
+++--- a/docs-master/keybindings/Keybindings_ko.md
++++++ b/docs-master/keybindings/Keybindings_ko.md
+++@@ -53,6 +53,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+++ | `` ] `` | 이전 탭 |  |
+++ | `` [ `` | 다음 탭 |  |
+++ 
++++## Commit description
++++
++++| Key | Action | Info |
++++|-----|--------|-------------|
++++| `` <c-g> `` | Generate commit message |  |
++++
+++ ## Input prompt
+++ 
+++ | Key | Action | Info |
+++@@ -356,6 +362,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+++ |-----|--------|-------------|
+++ | `` <enter> `` | 확인 |  |
+++ | `` <esc> `` | 닫기 |  |
++++| `` <c-g> `` | Generate commit message |  |
+++ 
+++ ## 태그
+++ 
+++diff --git a/docs-master/keybindings/Keybindings_nl.md b/docs-master/keybindings/Keybindings_nl.md
+++index 0bfffcb3d..6f25bf9ee 100644
+++--- a/docs-master/keybindings/Keybindings_nl.md
++++++ b/docs-master/keybindings/Keybindings_nl.md
+++@@ -130,6 +130,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+++ |-----|--------|-------------|
+++ | `` <enter> `` | Bevestig |  |
+++ | `` <esc> `` | Sluiten |  |
++++| `` <c-g> `` | Generate commit message |  |
+++ 
+++ ## Commit bestanden
+++ 
+++@@ -151,6 +152,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+++ | `` 0 `` | Focus main view |  |
+++ | `` / `` | Start met zoeken |  |
+++ 
++++## Commit description
++++
++++| Key | Action | Info |
++++|-----|--------|-------------|
++++| `` <c-g> `` | Generate commit message |  |
++++
+++ ## Commits
+++ 
+++ | Key | Action | Info |
+++diff --git a/docs-master/keybindings/Keybindings_pl.md b/docs-master/keybindings/Keybindings_pl.md
+++index 656f16a76..bedf400a6 100644
+++--- a/docs-master/keybindings/Keybindings_pl.md
++++++ b/docs-master/keybindings/Keybindings_pl.md
+++@@ -172,6 +172,12 @@ _Legenda: `<c-b>` oznacza ctrl+b, `<a-b>` oznacza alt+b, `B` oznacza shift+b_
+++ | `` <esc> `` | Zamknij/Anuluj |  |
+++ | `` / `` | Filtruj bieżący widok po tekście |  |
+++ 
++++## Opis commita
++++
++++| Key | Action | Info |
++++|-----|--------|-------------|
++++| `` <c-g> `` | Generate commit message |  |
++++
+++ ## Panel główny (normalny)
+++ 
+++ | Key | Action | Info |
+++@@ -287,6 +293,7 @@ _Legenda: `<c-b>` oznacza ctrl+b, `<a-b>` oznacza alt+b, `B` oznacza shift+b_
+++ |-----|--------|-------------|
+++ | `` <enter> `` | Potwierdź |  |
+++ | `` <esc> `` | Zamknij |  |
++++| `` <c-g> `` | Generate commit message |  |
+++ 
+++ ## Reflog
+++ 
+++diff --git a/docs-master/keybindings/Keybindings_pt.md b/docs-master/keybindings/Keybindings_pt.md
+++index c9e5d3bf4..28505c4cd 100644
+++--- a/docs-master/keybindings/Keybindings_pt.md
++++++ b/docs-master/keybindings/Keybindings_pt.md
+++@@ -204,6 +204,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+++ | `` <esc> `` | Fechar/Cancelar |  |
+++ | `` <c-o> `` | Copy to clipboard |  |
+++ 
++++## Descrição de Commit
++++
++++| Key | Action | Info |
++++|-----|--------|-------------|
++++| `` <c-g> `` | Generate commit message |  |
++++
+++ ## Etiquetas
+++ 
+++ | Key | Action | Info |
+++@@ -403,6 +409,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
+++ |-----|--------|-------------|
+++ | `` <enter> `` | Confirmar |  |
+++ | `` <esc> `` | Fechar |  |
++++| `` <c-g> `` | Generate commit message |  |
+++ 
+++ ## Worktrees
+++ 
+++diff --git a/docs-master/keybindings/Keybindings_ru.md b/docs-master/keybindings/Keybindings_ru.md
+++index df0a4ce1f..2562aa214 100644
+++--- a/docs-master/keybindings/Keybindings_ru.md
++++++ b/docs-master/keybindings/Keybindings_ru.md
+++@@ -240,6 +240,12 @@ _Связки клавиш_
+++ | `` <esc> `` | Закрыть/отменить |  |
+++ | `` / `` | Filter the current view by text |  |
+++ 
++++## Описание коммита
++++
++++| Key | Action | Info |
++++|-----|--------|-------------|
++++| `` <c-g> `` | Generate commit message |  |
++++
+++ ## Панель Подтверждения
+++ 
+++ | Key | Action | Info |
+++@@ -288,6 +294,7 @@ _Связки клавиш_
+++ |-----|--------|-------------|
+++ | `` <enter> `` | Подтвердить |  |
+++ | `` <esc> `` | Закрыть |  |
++++| `` <c-g> `` | Generate commit message |  |
+++ 
+++ ## Сохранить Изменения Файлов
+++ 
+++diff --git a/docs-master/keybindings/Keybindings_zh-CN.md b/docs-master/keybindings/Keybindings_zh-CN.md
+++index 169dbb9c8..9f655ab9c 100644
+++--- a/docs-master/keybindings/Keybindings_zh-CN.md
++++++ b/docs-master/keybindings/Keybindings_zh-CN.md
+++@@ -164,6 +164,13 @@ _图例：`<c-b>` 意味着ctrl+b, `<a-b>意味着Alt+b, `B` 意味着shift+b_
+++ |-----|--------|-------------|
+++ | `` <enter> `` | 确认 |  |
+++ | `` <esc> `` | 关闭 |  |
++++| `` <c-g> `` | Generate commit message |  |
++++
++++## 提交信息说明
++++
++++| Key | Action | Info |
++++|-----|--------|-------------|
++++| `` <c-g> `` | Generate commit message |  |
+++ 
+++ ## 提交文件
+++ 
+++diff --git a/docs-master/keybindings/Keybindings_zh-TW.md b/docs-master/keybindings/Keybindings_zh-TW.md
+++index 107976c26..6f5ce6f47 100644
+++--- a/docs-master/keybindings/Keybindings_zh-TW.md
++++++ b/docs-master/keybindings/Keybindings_zh-TW.md
+++@@ -216,12 +216,19 @@ _說明：`<c-b>` 表示 Ctrl＋B、`<a-b>` 表示 Alt＋B，`B`表示 Shift＋B
+++ | `` w `` | 檢視工作目錄選項 |  |
+++ | `` / `` | 搜尋 |  |
+++ 
++++## 提交描述
++++
++++| Key | Action | Info |
++++|-----|--------|-------------|
++++| `` <c-g> `` | Generate commit message |  |
++++
+++ ## 提交摘要
+++ 
+++ | Key | Action | Info |
+++ |-----|--------|-------------|
+++ | `` <enter> `` | 確認 |  |
+++ | `` <esc> `` | 關閉 |  |
++++| `` <c-g> `` | Generate commit message |  |
+++ 
+++ ## 提交檔案
+++ 
+++diff --git a/docs/Config.md b/docs/Config.md
+++index 38887b3e2..151deda54 100644
+++--- a/docs/Config.md
++++++ b/docs/Config.md
+++@@ -359,6 +359,12 @@ git:
+++     # If autoWrapCommitMessage is true, the width to wrap to
+++     autoWrapWidth: 72
+++ 
++++    # Configuration for generating commit messages via an external command.
++++    aiCommitMessage:
++++      # Command to run for generating a commit title and description.
++++      # The command is executed from the repository root.
++++      command: ""
++++
+++   # Config relating to merging
+++   merging:
+++     # If true, run merges in a subprocess so that if a commit message is required,
+++@@ -753,6 +759,7 @@ keybinding:
+++     bulkMenu: b
+++   commitMessage:
+++     commitMenu: <c-o>
++++    generateCommitMessage: <c-g>
+++ ```
+++ <!-- END CONFIG YAML -->
+++ 
+++-- 
+++2.51.2
+++
++diff --git a/patches/series/0005-test-integration-cover-AI-commit-message-generation.patch b/patches/series/0005-test-integration-cover-AI-commit-message-generation.patch
++new file mode 100644
++index 000000000..8da2e5fb9
++--- /dev/null
+++++ b/patches/series/0005-test-integration-cover-AI-commit-message-generation.patch
++@@ -0,0 +1,120 @@
+++From 03dd48b9a9267854799bbdea0b36ea8e35abe2ee Mon Sep 17 00:00:00 2001
+++From: endalk200 <eb808826@gmail.com>
+++Date: Tue, 17 Feb 2026 13:09:19 +0300
+++Subject: [PATCH 5/5] test(integration): cover AI commit message generation
+++
+++---
+++ .../tests/commit/generate_commit_message.go   | 42 +++++++++++++++++++
+++ ...erate_commit_message_malformed_response.go | 37 ++++++++++++++++
+++ pkg/integration/tests/test_list.go            |  2 +
+++ 3 files changed, 81 insertions(+)
+++ create mode 100644 pkg/integration/tests/commit/generate_commit_message.go
+++ create mode 100644 pkg/integration/tests/commit/generate_commit_message_malformed_response.go
+++
+++diff --git a/pkg/integration/tests/commit/generate_commit_message.go b/pkg/integration/tests/commit/generate_commit_message.go
+++new file mode 100644
+++index 000000000..5f4c61e50
+++--- /dev/null
++++++ b/pkg/integration/tests/commit/generate_commit_message.go
+++@@ -0,0 +1,42 @@
++++package commit
++++
++++import (
++++	"github.com/jesseduffield/lazygit/pkg/config"
++++	. "github.com/jesseduffield/lazygit/pkg/integration/components"
++++)
++++
++++var GenerateCommitMessage = NewIntegrationTest(NewIntegrationTestArgs{
++++	Description:  "Generate commit message via configured AI command",
++++	ExtraCmdArgs: []string{},
++++	Skip:         false,
++++	SetupConfig: func(config *config.AppConfig) {
++++		config.GetUserConfig().Git.Commit.AICommitMessage.Command = "sh ./generate_commit_message.sh"
++++	},
++++	SetupRepo: func(shell *Shell) {
++++		shell.CreateFile("file", "file content")
++++		shell.CreateFile("generate_commit_message.sh", "#!/bin/sh\ncat >/dev/null\nprintf '%s' '{\"version\":\"1\",\"title\":\"feat: generated title\",\"description\":\"generated body line 1\\ngenerated body line 2\"}'\n")
++++		shell.RunCommand([]string{"chmod", "+x", "generate_commit_message.sh"})
++++	},
++++	Run: func(t *TestDriver, keys config.KeybindingConfig) {
++++		t.Views().Files().
++++			Focus().
++++			PressPrimaryAction().
++++			Press(keys.Files.CommitChanges)
++++
++++		t.ExpectPopup().CommitMessagePanel().
++++			Title(Equals("Commit summary")).
++++			Type("old summary")
++++
++++		t.Views().CommitMessage().Press(keys.CommitMessage.GenerateCommitMessage)
++++
++++		t.ExpectPopup().Alert().
++++			Title(Equals("Generate commit message")).
++++			Content(Contains("overwrite")).
++++			Confirm()
++++
++++		t.ExpectPopup().CommitMessagePanel().
++++			Content(Equals("feat: generated title")).
++++			SwitchToDescription().
++++			Content(Equals("generated body line 1\ngenerated body line 2"))
++++	},
++++})
+++diff --git a/pkg/integration/tests/commit/generate_commit_message_malformed_response.go b/pkg/integration/tests/commit/generate_commit_message_malformed_response.go
+++new file mode 100644
+++index 000000000..f7b2ff64b
+++--- /dev/null
++++++ b/pkg/integration/tests/commit/generate_commit_message_malformed_response.go
+++@@ -0,0 +1,37 @@
++++package commit
++++
++++import (
++++	"github.com/jesseduffield/lazygit/pkg/config"
++++	. "github.com/jesseduffield/lazygit/pkg/integration/components"
++++)
++++
++++var GenerateCommitMessageMalformedResponse = NewIntegrationTest(NewIntegrationTestArgs{
++++	Description:  "Show an error when AI commit command returns malformed JSON",
++++	ExtraCmdArgs: []string{},
++++	Skip:         false,
++++	SetupConfig: func(config *config.AppConfig) {
++++		config.GetUserConfig().Git.Commit.AICommitMessage.Command = "sh ./generate_commit_message.sh"
++++	},
++++	SetupRepo: func(shell *Shell) {
++++		shell.CreateFile("file", "file content")
++++		shell.CreateFile("generate_commit_message.sh", "#!/bin/sh\ncat >/dev/null\nprintf '%s' 'not-json'\n")
++++		shell.RunCommand([]string{"chmod", "+x", "generate_commit_message.sh"})
++++	},
++++	Run: func(t *TestDriver, keys config.KeybindingConfig) {
++++		t.Views().Files().
++++			Focus().
++++			PressPrimaryAction().
++++			Press(keys.Files.CommitChanges)
++++
++++		t.ExpectPopup().CommitMessagePanel().Title(Equals("Commit summary"))
++++
++++		t.Views().CommitMessage().Press(keys.CommitMessage.GenerateCommitMessage)
++++
++++		t.ExpectPopup().Alert().
++++			Title(Equals("Error")).
++++			Content(Contains("invalid AI commit response")).
++++			Confirm()
++++
++++		t.ExpectPopup().CommitMessagePanel().Content(Equals(""))
++++	},
++++})
+++diff --git a/pkg/integration/tests/test_list.go b/pkg/integration/tests/test_list.go
+++index 4d9edaa70..7bd7f7bdc 100644
+++--- a/pkg/integration/tests/test_list.go
++++++ b/pkg/integration/tests/test_list.go
+++@@ -134,6 +134,8 @@ var tests = []*components.IntegrationTest{
+++ 	commit.FindBaseCommitForFixupDisregardMainBranch,
+++ 	commit.FindBaseCommitForFixupOnlyAddedLines,
+++ 	commit.FindBaseCommitForFixupWarningForAddedLines,
++++	commit.GenerateCommitMessage,
++++	commit.GenerateCommitMessageMalformedResponse,
+++ 	commit.Highlight,
+++ 	commit.History,
+++ 	commit.HistoryComplex,
+++-- 
+++2.51.2
+++
++diff --git a/patches/series/series b/patches/series/series
++new file mode 100644
++index 000000000..d4250b897
++--- /dev/null
+++++ b/patches/series/series
++@@ -0,0 +1,5 @@
+++0001-feat-config-add-AI-commit-message-configuration.patch
+++0002-feat-gui-generate-commit-message-from-external-comma.patch
+++0003-feat-i18n-add-generate-commit-message-strings.patch
+++0004-docs-config-document-AI-commit-message-settings.patch
+++0005-test-integration-cover-AI-commit-message-generation.patch
++-- 
++2.51.2
++
+diff --git a/patches/series/0008-Update-docs-and-schema-for-release.patch b/patches/series/0008-Update-docs-and-schema-for-release.patch
+new file mode 100644
+index 000000000..4a131883e
+--- /dev/null
++++ b/patches/series/0008-Update-docs-and-schema-for-release.patch
+@@ -0,0 +1,342 @@
++From 451059765927a14b4fc40bf8f20fc07e1dc4c5a6 Mon Sep 17 00:00:00 2001
++From: endalk200 <eb808826@gmail.com>
++Date: Tue, 17 Feb 2026 13:24:43 +0300
++Subject: [PATCH 08/10] Update docs and schema for release
++
++---
++ docs/PatchMaintenance.md              | 104 --------------------------
++ docs/keybindings/Keybindings_en.md    |   7 ++
++ docs/keybindings/Keybindings_ja.md    |   7 ++
++ docs/keybindings/Keybindings_ko.md    |   7 ++
++ docs/keybindings/Keybindings_nl.md    |   7 ++
++ docs/keybindings/Keybindings_pl.md    |   7 ++
++ docs/keybindings/Keybindings_pt.md    |   7 ++
++ docs/keybindings/Keybindings_ru.md    |   7 ++
++ docs/keybindings/Keybindings_zh-CN.md |   7 ++
++ docs/keybindings/Keybindings_zh-TW.md |   7 ++
++ 10 files changed, 63 insertions(+), 104 deletions(-)
++ delete mode 100644 docs/PatchMaintenance.md
++
++diff --git a/docs/PatchMaintenance.md b/docs/PatchMaintenance.md
++deleted file mode 100644
++index accd56fa9..000000000
++--- a/docs/PatchMaintenance.md
+++++ /dev/null
++@@ -1,104 +0,0 @@
++-# Patch Maintenance Runbook
++-
++-This runbook defines how to keep the fork aligned with upstream while preserving custom features as a patch queue.
++-
++-## One-time setup
++-
++-1. Ensure remotes are configured:
++-   - `origin`: `endalk200/lazygit`
++-   - `upstream`: `jesseduffield/lazygit`
++-2. Enable rerere so recurring conflicts are auto-resolved after the first manual fix:
++-   - `git config --global rerere.enabled true`
++-   - `git config --global rerere.autoupdate true`
++-
++-## Patch queue structure
++-
++-- Patch files live in `patches/series/`.
++-- Patch order is defined in `patches/series/series`.
++-- Scripts:
++-  - `scripts/bootstrap_patch_branch.sh`
++-  - `scripts/refresh_patches.sh`
++-  - `scripts/apply_patches.sh`
++-
++-## Bootstrap the first patch branch
++-
++-If your feature exists as uncommitted changes, run:
++-
++-```bash
++-scripts/bootstrap_patch_branch.sh
++-```
++-
++-The script:
++-
++-- creates `patches/ai-generated-commit-message`
++-- groups commits by logical area
++-- generates `git format-patch` files into `patches/series/`
++-
++-## Routine upstream sync
++-
++-1. Fetch upstream:
++-   - `git fetch upstream`
++-2. Create sync branch from upstream:
++-   - `git checkout -b sync/upstream-$(date +%Y%m%d)-$(git rev-parse --short upstream/master) upstream/master`
++-3. Apply patch queue:
++-   - `scripts/apply_patches.sh`
++-4. Validate:
++-   - `go test ./... -short`
++-   - `go run cmd/integration_test/main.go cli GenerateCommitMessage GenerateCommitMessageMalformedResponse`
++-5. Push branch and open PR to `origin/master`.
++-
++-You can also rely on `.github/workflows/sync-upstream.yml` for the automated version of this flow.
++-
++-## Refresh patches after edits
++-
++-When you change custom commits on your patch branch:
++-
++-```bash
++-scripts/refresh_patches.sh
++-```
++-
++-This rewrites patch files and updates `patches/series/series`.
++-
++-## Release checklist
++-
++-1. Confirm patch queue applies cleanly to latest upstream.
++-2. Confirm docs/schema consistency:
++-   - `diff -r -q docs docs-master`
++-   - `diff -r -q schema schema-master`
++-3. Run targeted validations:
++-   - `go test ./... -short`
++-   - `go run cmd/integration_test/main.go cli GenerateCommitMessage GenerateCommitMessageMalformedResponse`
++-4. Create release tag using fork scheme:
++-   - `vX.Y.Z-endalk.N`
++-5. Run release workflow (`.github/workflows/release.yml`) and verify:
++-   - all expected assets are present
++-   - `checksums.txt` is uploaded
++-6. Confirm tap update workflow opened a formula PR in `endalk200/homebrew`.
++-
++-## Rollback and recovery
++-
++-If release binaries are broken:
++-
++-1. Cut a new patch release tag with incremented suffix (do not reuse tag):
++-   - `vX.Y.Z-endalk.(N+1)`
++-2. Re-run release workflow for the fixed tag.
++-3. Close superseded tap PR and merge the new one.
++-
++-If patch application fails:
++-
++-1. Resolve conflicts.
++-2. Continue: `git am --continue`
++-3. Or abort: `git am --abort`
++-4. After successful resolution, regenerate patches:
++-   - `scripts/refresh_patches.sh`
++-
++-If tap update produced a bad formula PR:
++-
++-1. Close or revert the PR in `endalk200/homebrew`.
++-2. Re-run the updater workflow with the corrected release tag.
++-
++-## Health checks
++-
++-- `sync-upstream.yml` runs on a schedule to detect drift and conflicts early.
++-- `update-homebrew-tap.yml` updates formulae when new fork releases are published.
++-- If either workflow fails, inspect logs and fix before cutting the next release.
++diff --git a/docs/keybindings/Keybindings_en.md b/docs/keybindings/Keybindings_en.md
++index 76b02512c..fd68bfe2e 100644
++--- a/docs/keybindings/Keybindings_en.md
+++++ b/docs/keybindings/Keybindings_en.md
++@@ -53,6 +53,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
++ | `` ] `` | Next tab |  |
++ | `` [ `` | Previous tab |  |
++ 
+++## Commit description
+++
+++| Key | Action | Info |
+++|-----|--------|-------------|
+++| `` <c-g> `` | Generate commit message |  |
+++
++ ## Commit files
++ 
++ | Key | Action | Info |
++@@ -79,6 +85,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
++ |-----|--------|-------------|
++ | `` <enter> `` | Confirm |  |
++ | `` <esc> `` | Close |  |
+++| `` <c-g> `` | Generate commit message |  |
++ 
++ ## Commits
++ 
++diff --git a/docs/keybindings/Keybindings_ja.md b/docs/keybindings/Keybindings_ja.md
++index b657aa794..27b25b7bc 100644
++--- a/docs/keybindings/Keybindings_ja.md
+++++ b/docs/keybindings/Keybindings_ja.md
++@@ -127,6 +127,13 @@ _凡例：`＜c-b＞` はctrl+b、`＜a-b＞` はalt+b、`B` はshift+bを意味
++ |-----|--------|-------------|
++ | `` <enter> `` | 確認 |  |
++ | `` <esc> `` | 閉じる |  |
+++| `` <c-g> `` | Generate commit message |  |
+++
+++## コミット詳細
+++
+++| Key | Action | Info |
+++|-----|--------|-------------|
+++| `` <c-g> `` | Generate commit message |  |
++ 
++ ## サブコミット
++ 
++diff --git a/docs/keybindings/Keybindings_ko.md b/docs/keybindings/Keybindings_ko.md
++index 0860c8571..3ce0f117c 100644
++--- a/docs/keybindings/Keybindings_ko.md
+++++ b/docs/keybindings/Keybindings_ko.md
++@@ -53,6 +53,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
++ | `` ] `` | 이전 탭 |  |
++ | `` [ `` | 다음 탭 |  |
++ 
+++## Commit description
+++
+++| Key | Action | Info |
+++|-----|--------|-------------|
+++| `` <c-g> `` | Generate commit message |  |
+++
++ ## Input prompt
++ 
++ | Key | Action | Info |
++@@ -356,6 +362,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
++ |-----|--------|-------------|
++ | `` <enter> `` | 확인 |  |
++ | `` <esc> `` | 닫기 |  |
+++| `` <c-g> `` | Generate commit message |  |
++ 
++ ## 태그
++ 
++diff --git a/docs/keybindings/Keybindings_nl.md b/docs/keybindings/Keybindings_nl.md
++index 0bfffcb3d..6f25bf9ee 100644
++--- a/docs/keybindings/Keybindings_nl.md
+++++ b/docs/keybindings/Keybindings_nl.md
++@@ -130,6 +130,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
++ |-----|--------|-------------|
++ | `` <enter> `` | Bevestig |  |
++ | `` <esc> `` | Sluiten |  |
+++| `` <c-g> `` | Generate commit message |  |
++ 
++ ## Commit bestanden
++ 
++@@ -151,6 +152,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
++ | `` 0 `` | Focus main view |  |
++ | `` / `` | Start met zoeken |  |
++ 
+++## Commit description
+++
+++| Key | Action | Info |
+++|-----|--------|-------------|
+++| `` <c-g> `` | Generate commit message |  |
+++
++ ## Commits
++ 
++ | Key | Action | Info |
++diff --git a/docs/keybindings/Keybindings_pl.md b/docs/keybindings/Keybindings_pl.md
++index 656f16a76..bedf400a6 100644
++--- a/docs/keybindings/Keybindings_pl.md
+++++ b/docs/keybindings/Keybindings_pl.md
++@@ -172,6 +172,12 @@ _Legenda: `<c-b>` oznacza ctrl+b, `<a-b>` oznacza alt+b, `B` oznacza shift+b_
++ | `` <esc> `` | Zamknij/Anuluj |  |
++ | `` / `` | Filtruj bieżący widok po tekście |  |
++ 
+++## Opis commita
+++
+++| Key | Action | Info |
+++|-----|--------|-------------|
+++| `` <c-g> `` | Generate commit message |  |
+++
++ ## Panel główny (normalny)
++ 
++ | Key | Action | Info |
++@@ -287,6 +293,7 @@ _Legenda: `<c-b>` oznacza ctrl+b, `<a-b>` oznacza alt+b, `B` oznacza shift+b_
++ |-----|--------|-------------|
++ | `` <enter> `` | Potwierdź |  |
++ | `` <esc> `` | Zamknij |  |
+++| `` <c-g> `` | Generate commit message |  |
++ 
++ ## Reflog
++ 
++diff --git a/docs/keybindings/Keybindings_pt.md b/docs/keybindings/Keybindings_pt.md
++index c9e5d3bf4..28505c4cd 100644
++--- a/docs/keybindings/Keybindings_pt.md
+++++ b/docs/keybindings/Keybindings_pt.md
++@@ -204,6 +204,12 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
++ | `` <esc> `` | Fechar/Cancelar |  |
++ | `` <c-o> `` | Copy to clipboard |  |
++ 
+++## Descrição de Commit
+++
+++| Key | Action | Info |
+++|-----|--------|-------------|
+++| `` <c-g> `` | Generate commit message |  |
+++
++ ## Etiquetas
++ 
++ | Key | Action | Info |
++@@ -403,6 +409,7 @@ _Legend: `<c-b>` means ctrl+b, `<a-b>` means alt+b, `B` means shift+b_
++ |-----|--------|-------------|
++ | `` <enter> `` | Confirmar |  |
++ | `` <esc> `` | Fechar |  |
+++| `` <c-g> `` | Generate commit message |  |
++ 
++ ## Worktrees
++ 
++diff --git a/docs/keybindings/Keybindings_ru.md b/docs/keybindings/Keybindings_ru.md
++index df0a4ce1f..2562aa214 100644
++--- a/docs/keybindings/Keybindings_ru.md
+++++ b/docs/keybindings/Keybindings_ru.md
++@@ -240,6 +240,12 @@ _Связки клавиш_
++ | `` <esc> `` | Закрыть/отменить |  |
++ | `` / `` | Filter the current view by text |  |
++ 
+++## Описание коммита
+++
+++| Key | Action | Info |
+++|-----|--------|-------------|
+++| `` <c-g> `` | Generate commit message |  |
+++
++ ## Панель Подтверждения
++ 
++ | Key | Action | Info |
++@@ -288,6 +294,7 @@ _Связки клавиш_
++ |-----|--------|-------------|
++ | `` <enter> `` | Подтвердить |  |
++ | `` <esc> `` | Закрыть |  |
+++| `` <c-g> `` | Generate commit message |  |
++ 
++ ## Сохранить Изменения Файлов
++ 
++diff --git a/docs/keybindings/Keybindings_zh-CN.md b/docs/keybindings/Keybindings_zh-CN.md
++index 169dbb9c8..9f655ab9c 100644
++--- a/docs/keybindings/Keybindings_zh-CN.md
+++++ b/docs/keybindings/Keybindings_zh-CN.md
++@@ -164,6 +164,13 @@ _图例：`<c-b>` 意味着ctrl+b, `<a-b>意味着Alt+b, `B` 意味着shift+b_
++ |-----|--------|-------------|
++ | `` <enter> `` | 确认 |  |
++ | `` <esc> `` | 关闭 |  |
+++| `` <c-g> `` | Generate commit message |  |
+++
+++## 提交信息说明
+++
+++| Key | Action | Info |
+++|-----|--------|-------------|
+++| `` <c-g> `` | Generate commit message |  |
++ 
++ ## 提交文件
++ 
++diff --git a/docs/keybindings/Keybindings_zh-TW.md b/docs/keybindings/Keybindings_zh-TW.md
++index 107976c26..6f5ce6f47 100644
++--- a/docs/keybindings/Keybindings_zh-TW.md
+++++ b/docs/keybindings/Keybindings_zh-TW.md
++@@ -216,12 +216,19 @@ _說明：`<c-b>` 表示 Ctrl＋B、`<a-b>` 表示 Alt＋B，`B`表示 Shift＋B
++ | `` w `` | 檢視工作目錄選項 |  |
++ | `` / `` | 搜尋 |  |
++ 
+++## 提交描述
+++
+++| Key | Action | Info |
+++|-----|--------|-------------|
+++| `` <c-g> `` | Generate commit message |  |
+++
++ ## 提交摘要
++ 
++ | Key | Action | Info |
++ |-----|--------|-------------|
++ | `` <enter> `` | 確認 |  |
++ | `` <esc> `` | 關閉 |  |
+++| `` <c-g> `` | Generate commit message |  |
++ 
++ ## 提交檔案
++ 
++-- 
++2.51.2
++
+diff --git a/patches/series/0009-fix-ci-use-endalk200-homebrew-tap-for-tap-updates.patch b/patches/series/0009-fix-ci-use-endalk200-homebrew-tap-for-tap-updates.patch
+new file mode 100644
+index 000000000..ddea1d176
+--- /dev/null
++++ b/patches/series/0009-fix-ci-use-endalk200-homebrew-tap-for-tap-updates.patch
+@@ -0,0 +1,25 @@
++From 27e676c6ca77ab313c280981c14763f826e548fc Mon Sep 17 00:00:00 2001
++From: endalk200 <eb808826@gmail.com>
++Date: Tue, 17 Feb 2026 13:39:39 +0300
++Subject: [PATCH 09/10] fix(ci): use endalk200/homebrew-tap for tap updates
++
++---
++ .github/workflows/update-homebrew-tap.yml | 2 +-
++ 1 file changed, 1 insertion(+), 1 deletion(-)
++
++diff --git a/.github/workflows/update-homebrew-tap.yml b/.github/workflows/update-homebrew-tap.yml
++index fe552b764..267c5aa3e 100644
++--- a/.github/workflows/update-homebrew-tap.yml
+++++ b/.github/workflows/update-homebrew-tap.yml
++@@ -87,7 +87,7 @@ jobs:
++       - name: Checkout homebrew tap
++         uses: actions/checkout@v6
++         with:
++-          repository: endalk200/homebrew
+++          repository: endalk200/homebrew-tap
++           token: ${{ secrets.HOMEBREW_TAP_PAT }}
++           path: tap
++ 
++-- 
++2.51.2
++
+diff --git a/patches/series/0010-docs-readme-add-fork-notice-and-fork-install-guidanc.patch b/patches/series/0010-docs-readme-add-fork-notice-and-fork-install-guidanc.patch
+new file mode 100644
+index 000000000..37979e678
+--- /dev/null
++++ b/patches/series/0010-docs-readme-add-fork-notice-and-fork-install-guidanc.patch
+@@ -0,0 +1,130 @@
++From dfd7188263e1f0e269351b9d88ff7fc7d9c9262a Mon Sep 17 00:00:00 2001
++From: endalk200 <eb808826@gmail.com>
++Date: Tue, 17 Feb 2026 14:19:17 +0300
++Subject: [PATCH 10/10] docs(readme): add fork notice and fork install guidance
++
++Co-authored-by: Cursor <cursoragent@cursor.com>
++---
++ README.md | 90 +++++++++++++++++++++++++++++++------------------------
++ 1 file changed, 51 insertions(+), 39 deletions(-)
++
++diff --git a/README.md b/README.md
++index d840421c1..9833496a1 100644
++--- a/README.md
+++++ b/README.md
++@@ -1,41 +1,3 @@
++-<div align="center">
++-<sup>Special thanks to:</sup>
++-<br>
++-<br>
++-<a href="https://www.warp.dev/?utm_source=github&utm_medium=referral&utm_campaign=lazygit_20231023">
++-  <div>
++-    <img src="https://github.com/warpdotdev/brand-assets/blob/main/Github/Sponsor/Warp-Github-LG-02.png?raw=true" width="400" alt="Warp">
++-  </div>
++-  <b>Warp, the intelligent terminal</b>
++-  <br>
++-  <b>Available for MacOS and Linux</b>
++-  <br>
++-  <div>
++-    <sup>Visit warp.dev to learn more.</sup>
++-  </div>
++-</a>
++-<br>
++-<hr>
++-<a href="https://tuple.app/lazygit">
++-  <div>
++-    <img src="../assets/tuple.png" width="400" alt="Tuple">
++-  </div>
++-  <b>Tuple, the premier screen sharing app for developers on macOS and Windows.</b>
++-</a>
++-<br>
++-<hr>
++-<br>
++-<a href="https://www.subble.com">
++-  <div>
++-    <img src="../assets/subble.webp" width="400" alt="Subble">
++-  </div>
++-  <b>I (Jesse) co-founded Subble to save your company time and money by finding unused and over-provisioned SaaS licences. Check it out!</b>
++-</a>
++-<br>
++-
++-<hr>
++-</div>
++-
++ <p align="center">
++   <img width="536" src="https://user-images.githubusercontent.com/8456633/174470852-339b5011-5800-4bb9-a628-ff230aa8cd4e.png">
++ </p>
++@@ -45,12 +7,59 @@
++ A simple terminal UI for git commands
++ <br/>
++ 
++-[![GitHub Releases](https://img.shields.io/github/downloads/jesseduffield/lazygit/total)](https://github.com/jesseduffield/lazygit/releases) [![Go Report Card](https://goreportcard.com/badge/github.com/jesseduffield/lazygit)](https://goreportcard.com/report/github.com/jesseduffield/lazygit) [![Codacy Badge](https://app.codacy.com/project/badge/Grade/f46416b715d74622895657935fcada21)](https://app.codacy.com/gh/jesseduffield/lazygit/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_grade) [![Codacy Badge](https://app.codacy.com/project/badge/Coverage/f46416b715d74622895657935fcada21)](https://app.codacy.com/gh/jesseduffield/lazygit/dashboard?utm_source=gh&utm_medium=referral&utm_content=&utm_campaign=Badge_coverage) [![golangci-lint](https://img.shields.io/badge/linted%20by-golangci--lint-brightgreen)](https://golangci-lint.run/) [![GitHub tag](https://img.shields.io/github/v/tag/jesseduffield/lazygit?color=blue)](https://github.com/jesseduffield/lazygit/releases/latest) [![homebrew](https://img.shields.io/homebrew/v/lazygit?color=blue)](https://formulae.brew.sh/formula/lazygit)
+++[![Fork Releases](https://img.shields.io/github/v/tag/endalk200/lazygit?color=blue)](https://github.com/endalk200/lazygit/releases/latest) [![Upstream Project](https://img.shields.io/badge/upstream-jesseduffield%2Flazygit-blue)](https://github.com/jesseduffield/lazygit) [![homebrew](https://img.shields.io/badge/homebrew-endalk200%2Fhomebrew--tap-blue)](https://github.com/endalk200/homebrew-tap)
++ 
++ ![commit_and_push](../assets/demo/commit_and_push-compressed.gif)
++ 
++ </div>
++ 
+++## Fork Notice
+++
+++This repository is a personal fork of [`jesseduffield/lazygit`](https://github.com/jesseduffield/lazygit) maintained at [`endalk200/lazygit`](https://github.com/endalk200/lazygit).
+++
+++The goal is to stay close to upstream and regularly pull in upstream improvements while keeping a small set of fork-specific patches.
+++
+++Huge thanks to Jesse Duffield and all lazygit contributors for the original project.
+++
+++## What Is Different From Upstream
+++
+++- AI-assisted commit message generation integrated into the commit message flow.
+++- The AI action is wired to an external command so it stays tool-agnostic.
+++- The intended companion CLI is `better-commit`, published as:
+++  - npm package: `@better-tools/commit-message`
+++  - Homebrew package in `endalk200/homebrew-tap`
+++
+++## Install And Run This Fork
+++
+++1. Install this fork from Homebrew tap:
+++
+++```bash
+++brew tap endalk200/homebrew-tap
+++brew install lazygit-endalk
+++brew link --overwrite lazygit-endalk
+++```
+++
+++2. Install the companion AI CLI:
+++
+++```bash
+++npm install -g @better-tools/commit-message
+++```
+++
+++3. Configure lazygit to use the CLI:
+++
+++```yaml
+++git:
+++  commit:
+++    aiCommitMessage:
+++      command: "better-commit"
+++```
+++
+++4. Run:
+++
+++```bash
+++lazygit
+++```
+++
++ ## Sponsors
++ 
++ <p align="center">
++@@ -69,6 +78,9 @@ If you're a mere mortal like me and you're tired of hearing how powerful git is
++ 
++ ## Table of contents
++ 
+++- [Fork Notice](#fork-notice)
+++- [What Is Different From Upstream](#what-is-different-from-upstream)
+++- [Install And Run This Fork](#install-and-run-this-fork)
++ - [Sponsors](#sponsors)
++ - [Elevator Pitch](#elevator-pitch)
++ - [Table of contents](#table-of-contents)
++-- 
++2.51.2
++
+diff --git a/patches/series/series b/patches/series/series
+index d4250b897..f854dbf8a 100644
+--- a/patches/series/series
++++ b/patches/series/series
+@@ -3,3 +3,8 @@
+ 0003-feat-i18n-add-generate-commit-message-strings.patch
+ 0004-docs-config-document-AI-commit-message-settings.patch
+ 0005-test-integration-cover-AI-commit-message-generation.patch
++0006-chore-fork-add-patch-maintenance-and-automation-work.patch
++0007-chore-patches-add-AI-commit-message-patch-series.patch
++0008-Update-docs-and-schema-for-release.patch
++0009-fix-ci-use-endalk200-homebrew-tap-for-tap-updates.patch
++0010-docs-readme-add-fork-notice-and-fork-install-guidanc.patch
+-- 
+2.51.2
+

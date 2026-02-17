@@ -1,7 +1,7 @@
 From 451059765927a14b4fc40bf8f20fc07e1dc4c5a6 Mon Sep 17 00:00:00 2001
 From: endalk200 <eb808826@gmail.com>
 Date: Tue, 17 Feb 2026 13:24:43 +0300
-Subject: [PATCH 08/10] Update docs and schema for release
+Subject: [PATCH 08/12] Update docs and schema for release
 
 ---
  docs/PatchMaintenance.md              | 104 --------------------------

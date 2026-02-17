@@ -1,7 +1,7 @@
 From 413967fbf228557fc4ee9eda7e25dad600f76b3d Mon Sep 17 00:00:00 2001
 From: endalk200 <eb808826@gmail.com>
 Date: Tue, 17 Feb 2026 13:09:19 +0300
-Subject: [PATCH 05/10] test(integration): cover AI commit message generation
+Subject: [PATCH 05/12] test(integration): cover AI commit message generation
 
 ---
  .../tests/commit/generate_commit_message.go   | 42 +++++++++++++++++++

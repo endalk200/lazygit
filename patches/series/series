@@ -8,3 +8,5 @@
 0008-Update-docs-and-schema-for-release.patch
 0009-fix-ci-use-endalk200-homebrew-tap-for-tap-updates.patch
 0010-docs-readme-add-fork-notice-and-fork-install-guidanc.patch
+0011-chore-patches-refresh-patch-series-after-README-upda.patch
+0012-docs-readme-remove-top-splash-image-from-fork-readme.patch

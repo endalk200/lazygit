@@ -1,7 +1,7 @@
 From 079859c3a1d711bd0c1f7175db9813a7b8e4714e Mon Sep 17 00:00:00 2001
 From: endalk200 <eb808826@gmail.com>
 Date: Tue, 17 Feb 2026 13:09:19 +0300
-Subject: [PATCH 01/10] feat(config): add AI commit message configuration
+Subject: [PATCH 01/12] feat(config): add AI commit message configuration
 
 ---
  pkg/config/user_config.go | 17 +++++++++++++++--
