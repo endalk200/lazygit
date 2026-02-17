@@ -1,0 +1,120 @@
+From 03dd48b9a9267854799bbdea0b36ea8e35abe2ee Mon Sep 17 00:00:00 2001
+From: endalk200 <eb808826@gmail.com>
+Date: Tue, 17 Feb 2026 13:09:19 +0300
+Subject: [PATCH 5/5] test(integration): cover AI commit message generation
+
+---
+ .../tests/commit/generate_commit_message.go   | 42 +++++++++++++++++++
+ ...erate_commit_message_malformed_response.go | 37 ++++++++++++++++
+ pkg/integration/tests/test_list.go            |  2 +
+ 3 files changed, 81 insertions(+)
+ create mode 100644 pkg/integration/tests/commit/generate_commit_message.go
+ create mode 100644 pkg/integration/tests/commit/generate_commit_message_malformed_response.go
+
+diff --git a/pkg/integration/tests/commit/generate_commit_message.go b/pkg/integration/tests/commit/generate_commit_message.go
+new file mode 100644
+index 000000000..5f4c61e50
+--- /dev/null
++++ b/pkg/integration/tests/commit/generate_commit_message.go
+@@ -0,0 +1,42 @@
++package commit
++
++import (
++	"github.com/jesseduffield/lazygit/pkg/config"
++	. "github.com/jesseduffield/lazygit/pkg/integration/components"
++)
++
++var GenerateCommitMessage = NewIntegrationTest(NewIntegrationTestArgs{
++	Description:  "Generate commit message via configured AI command",
++	ExtraCmdArgs: []string{},
++	Skip:         false,
++	SetupConfig: func(config *config.AppConfig) {
++		config.GetUserConfig().Git.Commit.AICommitMessage.Command = "sh ./generate_commit_message.sh"
++	},
++	SetupRepo: func(shell *Shell) {
++		shell.CreateFile("file", "file content")
++		shell.CreateFile("generate_commit_message.sh", "#!/bin/sh\ncat >/dev/null\nprintf '%s' '{\"version\":\"1\",\"title\":\"feat: generated title\",\"description\":\"generated body line 1\\ngenerated body line 2\"}'\n")
++		shell.RunCommand([]string{"chmod", "+x", "generate_commit_message.sh"})
++	},
++	Run: func(t *TestDriver, keys config.KeybindingConfig) {
++		t.Views().Files().
++			Focus().
++			PressPrimaryAction().
++			Press(keys.Files.CommitChanges)
++
++		t.ExpectPopup().CommitMessagePanel().
++			Title(Equals("Commit summary")).
++			Type("old summary")
++
++		t.Views().CommitMessage().Press(keys.CommitMessage.GenerateCommitMessage)
++
++		t.ExpectPopup().Alert().
++			Title(Equals("Generate commit message")).
++			Content(Contains("overwrite")).
++			Confirm()
++
++		t.ExpectPopup().CommitMessagePanel().
++			Content(Equals("feat: generated title")).
++			SwitchToDescription().
++			Content(Equals("generated body line 1\ngenerated body line 2"))
++	},
++})
+diff --git a/pkg/integration/tests/commit/generate_commit_message_malformed_response.go b/pkg/integration/tests/commit/generate_commit_message_malformed_response.go
+new file mode 100644
+index 000000000..f7b2ff64b
+--- /dev/null
++++ b/pkg/integration/tests/commit/generate_commit_message_malformed_response.go
+@@ -0,0 +1,37 @@
++package commit
++
++import (
++	"github.com/jesseduffield/lazygit/pkg/config"
++	. "github.com/jesseduffield/lazygit/pkg/integration/components"
++)
++
++var GenerateCommitMessageMalformedResponse = NewIntegrationTest(NewIntegrationTestArgs{
++	Description:  "Show an error when AI commit command returns malformed JSON",
++	ExtraCmdArgs: []string{},
++	Skip:         false,
++	SetupConfig: func(config *config.AppConfig) {
++		config.GetUserConfig().Git.Commit.AICommitMessage.Command = "sh ./generate_commit_message.sh"
++	},
++	SetupRepo: func(shell *Shell) {
++		shell.CreateFile("file", "file content")
++		shell.CreateFile("generate_commit_message.sh", "#!/bin/sh\ncat >/dev/null\nprintf '%s' 'not-json'\n")
++		shell.RunCommand([]string{"chmod", "+x", "generate_commit_message.sh"})
++	},
++	Run: func(t *TestDriver, keys config.KeybindingConfig) {
++		t.Views().Files().
++			Focus().
++			PressPrimaryAction().
++			Press(keys.Files.CommitChanges)
++
++		t.ExpectPopup().CommitMessagePanel().Title(Equals("Commit summary"))
++
++		t.Views().CommitMessage().Press(keys.CommitMessage.GenerateCommitMessage)
++
++		t.ExpectPopup().Alert().
++			Title(Equals("Error")).
++			Content(Contains("invalid AI commit response")).
++			Confirm()
++
++		t.ExpectPopup().CommitMessagePanel().Content(Equals(""))
++	},
++})
+diff --git a/pkg/integration/tests/test_list.go b/pkg/integration/tests/test_list.go
+index 4d9edaa70..7bd7f7bdc 100644
+--- a/pkg/integration/tests/test_list.go
++++ b/pkg/integration/tests/test_list.go
+@@ -134,6 +134,8 @@ var tests = []*components.IntegrationTest{
+ 	commit.FindBaseCommitForFixupDisregardMainBranch,
+ 	commit.FindBaseCommitForFixupOnlyAddedLines,
+ 	commit.FindBaseCommitForFixupWarningForAddedLines,
++	commit.GenerateCommitMessage,
++	commit.GenerateCommitMessageMalformedResponse,
+ 	commit.Highlight,
+ 	commit.History,
+ 	commit.HistoryComplex,
+-- 
+2.51.2
+
