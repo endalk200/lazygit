@@ -216,12 +216,19 @@ _說明：`<c-b>` 表示 Ctrl＋B、`<a-b>` 表示 Alt＋B，`B`表示 Shift＋B
 | `` w `` | 檢視工作目錄選項 |  |
 | `` / `` | 搜尋 |  |
 
+## 提交描述
+
+| Key | Action | Info |
+|-----|--------|-------------|
+| `` <c-g> `` | Generate commit message |  |
+
 ## 提交摘要
 
 | Key | Action | Info |
 |-----|--------|-------------|
 | `` <enter> `` | 確認 |  |
 | `` <esc> `` | 關閉 |  |
+| `` <c-g> `` | Generate commit message |  |
 
 ## 提交檔案
 
