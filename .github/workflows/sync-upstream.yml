@@ -57,7 +57,10 @@ jobs:
           } >> "$GITHUB_OUTPUT"
 
       - name: Apply patch queue
-        run: scripts/apply_patches.sh
+        run: |
+          ASSETS_DIR="$(mktemp -d)"
+          git archive --format=tar origin/master patches/series scripts/apply_patches.sh | tar -x -C "$ASSETS_DIR"
+          "$ASSETS_DIR/scripts/apply_patches.sh" "$ASSETS_DIR/patches/series"
 
       - name: Setup Go
         uses: actions/setup-go@v6
