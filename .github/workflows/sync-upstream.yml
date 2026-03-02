@@ -73,7 +73,7 @@ jobs:
         run: |
           go test ./... -short
           go test ./pkg/gui/controllers/helpers -run TestParseGenerateCommitMessageResponse
-          go run cmd/integration_test/main.go cli GenerateCommitMessage GenerateCommitMessageMalformedResponse
+          go run cmd/integration_test/main.go cli commit/generate_commit_message commit/generate_commit_message_malformed_response
 
       - name: Check if sync changes exist
         id: check_changes
@@ -104,6 +104,6 @@ jobs:
           ## Validation
           - `go test ./... -short`
           - `go test ./pkg/gui/controllers/helpers -run TestParseGenerateCommitMessageResponse`
-          - `go run cmd/integration_test/main.go cli GenerateCommitMessage GenerateCommitMessageMalformedResponse`
+          - `go run cmd/integration_test/main.go cli commit/generate_commit_message commit/generate_commit_message_malformed_response`
           EOF
           )"
